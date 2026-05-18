@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-green-dark: #2d4a2d;
+  --color-cream: #f5f0e8;
+  --color-amber: #e8a020;
+  --font-serif: var(--font-playfair);
+  --font-sans: var(--font-inter);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-inter), sans-serif;
+  background-color: #f5f0e8;
+}
+
+.font-serif {
+  font-family: var(--font-playfair), Georgia, serif;
+}
