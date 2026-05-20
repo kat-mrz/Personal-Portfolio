@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-green-dark: #2d4a2d;
-  --color-cream: #f5f0e8;
+  --color-midnight: #0d1b3e;
+  --color-near-white: #f0f4ff;
   --color-amber: #e8a020;
   --font-serif: var(--font-playfair);
   --font-sans: var(--font-inter);
@@ -15,9 +15,38 @@
 body {
   margin: 0;
   font-family: var(--font-inter), sans-serif;
-  background-color: #f5f0e8;
+  background-color: #f0f4ff;
 }
 
 .font-serif {
   font-family: var(--font-playfair), Georgia, serif;
+}
+
+/* Star twinkle — opacity + scale on the inner element.
+   The outer wrapper holds the drop-shadow; as the star shrinks the glow also fades. */
+@keyframes twinkle {
+  0%, 100% { opacity: 1;    transform: scale(1); }
+  35%       { opacity: 0.07; transform: scale(0.38); }
+  60%       { opacity: 0.42; transform: scale(0.68); }
+}
+
+/* Mason-jar interior glow */
+@keyframes firefly-in-jar {
+  0%, 100% { opacity: 0.85; }
+  50%       { opacity: 0.15; }
+}
+.firefly-in-jar {
+  animation: firefly-in-jar 1.8s ease-in-out infinite;
+}
+
+/* Firefly ambient pulse — only box-shadow so it doesn't conflict
+   with the React-controlled opacity transition */
+@keyframes firefly-glow {
+  0%, 100% { box-shadow: 0 0 5px 2px rgba(232, 200, 40, 0.55); }
+  50%       { box-shadow: 0 0 11px 5px rgba(232, 200, 40, 0.92); }
+}
+.firefly {
+  background-color: #e8c828;
+  border-radius: 50%;
+  animation: firefly-glow 1.5s ease-in-out infinite;
 }
