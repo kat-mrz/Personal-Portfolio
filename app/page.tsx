@@ -65,11 +65,15 @@ function Navbar({ light }: { light?: boolean }) {
         <span style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}>Katrina Mrzljak</span>
       </div>
       <div className="hidden md:flex items-center gap-8">
-        {["About me", "Resume", "Work"].map((link) => (
-          <a key={link} href={`#${link.toLowerCase().replace(" ", "")}`}
-            className={`text-sm font-medium hover:opacity-60 transition-opacity ${textColor}`}>{link}</a>
+        {[
+          { label: "About me", href: "#about"  },
+          { label: "Resume",   href: "#resume" },
+          { label: "Work",     href: "#work"   },
+        ].map(({ label, href }) => (
+          <a key={label} href={href}
+            className={`text-sm font-medium hover:opacity-60 transition-opacity ${textColor}`}>{label}</a>
         ))}
-        <a href="#contact" className="bg-[#e8a020] text-white text-sm font-semibold px-5 py-2 rounded-full hover:bg-[#d4911c] transition-colors">
+        <a href="#get-in-touch" className="bg-[#e8a020] text-white text-sm font-semibold px-5 py-2 rounded-full hover:bg-[#d4911c] transition-colors">
           Get in touch!
         </a>
       </div>
@@ -103,38 +107,38 @@ type HeroStar = {
 /* Stars are organised in three depth layers so parallax reads clearly */
 const HERO_STARS: HeroStar[] = [
   /* ── deep background (tiny, barely move) ── */
-  { top: "8%",  left: "4%",   size: "0.32vw", color: "#ffffff", opacity: 0.32, delay: 1.1,  depth: 0.04, glow: 2  },
-  { top: "16%", left: "16%",  size: "0.28vw", color: "#ffffff", opacity: 0.28, delay: 2.4,  depth: 0.05, glow: 1.5},
-  { top: "24%", right: "7%",  size: "0.3vw",  color: "#ffffff", opacity: 0.25, delay: 3.6,  depth: 0.04, glow: 1.5},
-  { top: "36%", left: "57%",  size: "0.3vw",  color: "#ffffff", opacity: 0.30, delay: 0.9,  depth: 0.05, glow: 2  },
-  { top: "50%", right: "18%", size: "0.27vw", color: "#ffffff", opacity: 0.22, delay: 1.8,  depth: 0.04, glow: 1.5},
-  { top: "63%", left: "7%",   size: "0.3vw",  color: "#ffffff", opacity: 0.28, delay: 2.9,  depth: 0.05, glow: 2  },
-  { top: "77%", right: "11%", size: "0.28vw", color: "#ffffff", opacity: 0.25, delay: 0.5,  depth: 0.04, glow: 1.5},
-  { top: "89%", left: "42%",  size: "0.27vw", color: "#ffffff", opacity: 0.22, delay: 3.2,  depth: 0.05, glow: 1.5},
-  { top: "55%", left: "30%",  size: "0.3vw",  color: "#ffffff", opacity: 0.27, delay: 1.4,  depth: 0.04, glow: 2  },
-  { top: "10%", left: "72%",  size: "0.3vw",  color: "#ffffff", opacity: 0.3,  delay: 4.1,  depth: 0.05, glow: 2  },
-  { top: "42%", left: "5%",   size: "0.28vw", color: "#ffffff", opacity: 0.25, delay: 2.7,  depth: 0.04, glow: 1.5},
-  { top: "68%", left: "65%",  size: "0.3vw",  color: "#ffffff", opacity: 0.28, delay: 0.2,  depth: 0.05, glow: 2  },
+  { top: "8%",  left: "4%",   size: "0.38vw", color: "#ffffff", opacity: 0.52, delay: 1.1,  depth: 0.04, glow: 3.5},
+  { top: "16%", left: "16%",  size: "0.34vw", color: "#ffffff", opacity: 0.48, delay: 2.4,  depth: 0.05, glow: 3  },
+  { top: "24%", right: "7%",  size: "0.36vw", color: "#ffffff", opacity: 0.45, delay: 3.6,  depth: 0.04, glow: 3  },
+  { top: "36%", left: "57%",  size: "0.36vw", color: "#ffffff", opacity: 0.50, delay: 0.9,  depth: 0.05, glow: 3.5},
+  { top: "50%", right: "18%", size: "0.33vw", color: "#ffffff", opacity: 0.42, delay: 1.8,  depth: 0.04, glow: 3  },
+  { top: "63%", left: "7%",   size: "0.36vw", color: "#ffffff", opacity: 0.48, delay: 2.9,  depth: 0.05, glow: 3.5},
+  { top: "77%", right: "11%", size: "0.34vw", color: "#ffffff", opacity: 0.44, delay: 0.5,  depth: 0.04, glow: 3  },
+  { top: "89%", left: "42%",  size: "0.33vw", color: "#ffffff", opacity: 0.40, delay: 3.2,  depth: 0.05, glow: 3  },
+  { top: "55%", left: "30%",  size: "0.36vw", color: "#ffffff", opacity: 0.46, delay: 1.4,  depth: 0.04, glow: 3.5},
+  { top: "10%", left: "72%",  size: "0.36vw", color: "#ffffff", opacity: 0.50, delay: 4.1,  depth: 0.05, glow: 3.5},
+  { top: "42%", left: "5%",   size: "0.34vw", color: "#ffffff", opacity: 0.44, delay: 2.7,  depth: 0.04, glow: 3  },
+  { top: "68%", left: "65%",  size: "0.36vw", color: "#ffffff", opacity: 0.48, delay: 0.2,  depth: 0.05, glow: 3.5},
 
   /* ── mid field (medium, moderate parallax) ── */
-  { top: "13%", left: "8%",   size: "0.9vw",  color: "#e0eaff", opacity: 0.50, delay: 0.8,  depth: 0.13, glow: 4  },
-  { top: "28%", left: "22%",  size: "0.55vw", color: "#ffffff", opacity: 0.38, delay: 1.7,  depth: 0.15, glow: 3  },
-  { top: "44%", left: "48%",  size: "0.65vw", color: "#ffffff", opacity: 0.42, delay: 0.3,  depth: 0.14, glow: 3.5},
-  { top: "73%", left: "54%",  size: "0.75vw", color: "#ffffff", opacity: 0.45, delay: 2.6,  depth: 0.12, glow: 3  },
-  { top: "38%", right: "29%", size: "0.58vw", color: "#ffffff", opacity: 0.38, delay: 3.2,  depth: 0.16, glow: 3  },
-  { top: "84%", left: "27%",  size: "0.85vw", color: "#ddeeff", opacity: 0.33, delay: 0.7,  depth: 0.11, glow: 3.5},
-  { top: "19%", right: "16%", size: "0.5vw",  color: "#ffffff", opacity: 0.32, delay: 2.8,  depth: 0.14, glow: 3  },
-  { top: "52%", left: "63%",  size: "0.55vw", color: "#ffffff", opacity: 0.38, delay: 1.6,  depth: 0.15, glow: 3  },
-  { top: "60%", left: "18%",  size: "0.6vw",  color: "#ffffff", opacity: 0.35, delay: 3.8,  depth: 0.13, glow: 3.5},
+  { top: "13%", left: "8%",   size: "1.05vw", color: "#e0eaff", opacity: 0.75, delay: 0.8,  depth: 0.13, glow: 6.5},
+  { top: "28%", left: "22%",  size: "0.7vw",  color: "#ffffff", opacity: 0.62, delay: 1.7,  depth: 0.15, glow: 5  },
+  { top: "44%", left: "48%",  size: "0.8vw",  color: "#ffffff", opacity: 0.65, delay: 0.3,  depth: 0.14, glow: 5.5},
+  { top: "73%", left: "54%",  size: "0.9vw",  color: "#ffffff", opacity: 0.68, delay: 2.6,  depth: 0.12, glow: 5  },
+  { top: "38%", right: "29%", size: "0.72vw", color: "#ffffff", opacity: 0.60, delay: 3.2,  depth: 0.16, glow: 5  },
+  { top: "84%", left: "27%",  size: "1.0vw",  color: "#ddeeff", opacity: 0.58, delay: 0.7,  depth: 0.11, glow: 5.5},
+  { top: "19%", right: "16%", size: "0.65vw", color: "#ffffff", opacity: 0.55, delay: 2.8,  depth: 0.14, glow: 4.5},
+  { top: "52%", left: "63%",  size: "0.7vw",  color: "#ffffff", opacity: 0.60, delay: 1.6,  depth: 0.15, glow: 5  },
+  { top: "60%", left: "18%",  size: "0.75vw", color: "#ffffff", opacity: 0.58, delay: 3.8,  depth: 0.13, glow: 5.5},
 
   /* ── foreground amber (large, strong glow, most parallax) ── */
-  { top: "7vh",    left: "34%",  size: "1.5vw",  color: "#e8a020", opacity: 1.0,  delay: 0.4,  depth: 0.28, glow: 9  },
-  { top: "58%",    left: "34%",  size: "0.8vw",  color: "#e8a020", opacity: 0.42, delay: 1.2,  depth: 0.22, glow: 6  },
-  { bottom: "6vh", right: "3vw", size: "1.8vw",  color: "#e8a020", opacity: 1.0,  delay: 2.1,  depth: 0.32, glow: 11 },
-  { top: "11%",    right: "22%", size: "1.2vw",  color: "#e8c060", opacity: 0.68, delay: 1.0,  depth: 0.25, glow: 7  },
-  { top: "65%",    right: "40%", size: "0.72vw", color: "#e8a020", opacity: 0.55, delay: 1.9,  depth: 0.20, glow: 5  },
-  { top: "32%",    left: "75%",  size: "0.9vw",  color: "#e8c060", opacity: 0.48, delay: 3.0,  depth: 0.24, glow: 6  },
-  { top: "80%",    left: "14%",  size: "1.0vw",  color: "#e8a020", opacity: 0.55, delay: 0.6,  depth: 0.26, glow: 6  },
+  { top: "7vh",    left: "34%",  size: "1.6vw",  color: "#e8a020", opacity: 1.0,  delay: 0.4,  depth: 0.28, glow: 13 },
+  { top: "58%",    left: "34%",  size: "0.95vw", color: "#e8a020", opacity: 0.65, delay: 1.2,  depth: 0.22, glow: 8  },
+  { bottom: "6vh", right: "3vw", size: "2.0vw",  color: "#e8a020", opacity: 1.0,  delay: 2.1,  depth: 0.32, glow: 15 },
+  { top: "11%",    right: "22%", size: "1.35vw", color: "#e8c060", opacity: 0.85, delay: 1.0,  depth: 0.25, glow: 10 },
+  { top: "65%",    right: "40%", size: "0.88vw", color: "#e8a020", opacity: 0.75, delay: 1.9,  depth: 0.20, glow: 7  },
+  { top: "32%",    left: "75%",  size: "1.05vw", color: "#e8c060", opacity: 0.70, delay: 3.0,  depth: 0.24, glow: 8  },
+  { top: "80%",    left: "14%",  size: "1.15vw", color: "#e8a020", opacity: 0.78, delay: 0.6,  depth: 0.26, glow: 9  },
 ];
 
 function HeroSection({ onJarClick, jarTipped }: { onJarClick: () => void; jarTipped: boolean }) {
@@ -156,7 +160,7 @@ function HeroSection({ onJarClick, jarTipped }: { onJarClick: () => void; jarTip
   }, []);
 
   return (
-    <section id="hero" className="relative bg-[#0d1b3e] min-h-screen">
+    <section id="hero" className="relative hero-bg min-h-screen">
 
       {/* ── Mobile hero ── */}
       <div className="md:hidden flex flex-col justify-between min-h-screen px-6 pt-24 pb-12 overflow-hidden">
@@ -239,9 +243,10 @@ function HeroSection({ onJarClick, jarTipped }: { onJarClick: () => void; jarTip
           </div>
         </div>
 
-        {/* PORTFOLIO heading (solid) */}
-        <div className="absolute inset-x-0 z-30 select-none pointer-events-none" style={{ top: "14%" }}>
-          <h1 className="text-white font-black text-center leading-[0.88]" style={PORTFOLIO_STYLE}>PORTFOLIO</h1>
+        {/* PORTFOLIO heading — sits below the navbar (z-50) */}
+        <div className="absolute inset-x-0 select-none pointer-events-none" style={{ top: "14%", zIndex: 40 }}>
+          <h1 className="text-white font-black text-center leading-[0.88]"
+            style={{ ...PORTFOLIO_STYLE }}>PORTFOLIO</h1>
         </div>
 
         {/* Find Me panel */}
@@ -516,22 +521,35 @@ function ResumeSection() {
 ───────────────────────────────────────────────────────────── */
 function WorkSection() {
   const projects = [
-    { title: "Project Title", tag: "UX Design · 2024" },
-    { title: "Project Title", tag: "Brand Identity · 2024" },
-    { title: "Project Title", tag: "Product Design · 2023" },
-    { title: "Project Title", tag: "UX Research · 2023" },
+    { title: "Project Title", tag: "UX Design · 2024",       href: "/work/project-1" },
+    { title: "Project Title", tag: "Brand Identity · 2024",  href: null },
+    { title: "Project Title", tag: "Product Design · 2023",  href: null },
+    { title: "Project Title", tag: "UX Research · 2023",     href: null },
   ];
 
   const cards = (cols: number, gap: string, pad: string) => (
     <div style={{ display: "grid", gridTemplateColumns: `repeat(${cols}, 1fr)`, gap }}>
-      {projects.map((p, i) => (
-        <div key={i} className="bg-[#0d1b3e] flex flex-col justify-end cursor-pointer group relative overflow-hidden"
-          style={{ aspectRatio: "16/10", padding: pad }}>
-          <div className="absolute inset-0 bg-[#e8a020] opacity-0 group-hover:opacity-10 transition-opacity" />
-          <span className="text-white/30 block" style={{ fontSize: "clamp(0.65rem, 0.9vw, 0.8rem)", marginBottom: "0.4vw" }}>{p.tag}</span>
-          <span className="text-white font-bold" style={{ fontFamily: "var(--font-playfair), Georgia, serif", fontSize: "clamp(1rem, 1.6vw, 1.5rem)" }}>{p.title}</span>
-        </div>
-      ))}
+      {projects.map((p, i) => {
+        const inner = (
+          <>
+            <div className="absolute inset-0 bg-[#e8a020] opacity-0 group-hover:opacity-10 transition-opacity" />
+            <span className="text-white/30 block" style={{ fontSize: "clamp(0.65rem, 0.9vw, 0.8rem)", marginBottom: "0.4vw" }}>{p.tag}</span>
+            <span className="text-white font-bold" style={{ fontFamily: "var(--font-playfair), Georgia, serif", fontSize: "clamp(1rem, 1.6vw, 1.5rem)" }}>{p.title}</span>
+          </>
+        );
+        return p.href ? (
+          <a key={i} href={p.href}
+            className="bg-[#0d1b3e] flex flex-col justify-end cursor-pointer group relative overflow-hidden no-underline"
+            style={{ aspectRatio: "16/10", padding: pad }}>
+            {inner}
+          </a>
+        ) : (
+          <div key={i} className="bg-[#0d1b3e] flex flex-col justify-end cursor-pointer group relative overflow-hidden"
+            style={{ aspectRatio: "16/10", padding: pad }}>
+            {inner}
+          </div>
+        );
+      })}
     </div>
   );
 
@@ -579,26 +597,37 @@ function FooterSection() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const sunY = `${100 - sunProgress * 115}%`;
+  // At progress 0 → fully below (translateY 150%); at 1 → top half visible (translateY 50%)
+  const sunY = `${150 - sunProgress * 100}%`;
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden"
+    <section ref={sectionRef} id="get-in-touch" className="relative overflow-hidden"
       style={{
-        background: "linear-gradient(to bottom, #070d20 0%, #140826 18%, #38082e 40%, #881808 65%, #c44c0c 82%, #e8a020 100%)",
+        background: "linear-gradient(to bottom, #060a1e 0%, #0e1235 18%, #281050 36%, #5a1858 54%, #aa3828 72%, #e08020 88%, #f0a828 100%)",
         paddingTop: "clamp(4rem, 7vw, 7rem)", paddingBottom: "clamp(3rem, 5vw, 5rem)",
         paddingLeft: "clamp(1.5rem, 5vw, 5vw)", paddingRight: "clamp(1.5rem, 5vw, 5vw)",
       }}>
+      {/* Midday-sky wash — fades in over the sunrise as you scroll through the section */}
+      <div aria-hidden className="absolute inset-0 pointer-events-none"
+        style={{
+          background: "linear-gradient(to bottom, #0e3d6a 0%, #1a6ea8 35%, #3a96c8 70%, #78c0e0 100%)",
+          opacity: sunProgress * 0.82,
+          zIndex: 1,
+        }} />
+
+      {/* Large rising sun */}
       <div aria-hidden className="absolute pointer-events-none"
         style={{
           bottom: 0, left: "50%",
           width: "min(58vw, 540px)", height: "min(58vw, 540px)",
           borderRadius: "50%",
-          background: "radial-gradient(circle at 50% 50%, #fffbe0 0%, #ffd060 22%, #e8a020 46%, #c03808 72%, transparent 92%)",
+          background: "radial-gradient(circle at 50% 50%, #fff8e8 0%, #ffe098 22%, #f09828 45%, #c05830 70%, transparent 92%)",
           transform: `translateX(-50%) translateY(${sunY})`,
           opacity: 0.72, filter: "blur(1.5px)",
+          zIndex: 1,
         }} />
       <div aria-hidden className="absolute pointer-events-none left-0 right-0 bottom-0"
-        style={{ height: "40%", background: "linear-gradient(to top, rgba(232,160,32,0.22), transparent)" }} />
+        style={{ height: "40%", background: "linear-gradient(to top, rgba(232,160,32,0.22), transparent)", zIndex: 1 }} />
       <div className="relative z-10 flex flex-col md:flex-row md:items-end md:justify-between gap-8 md:gap-0">
         <div>
           <p className="text-white/50 uppercase tracking-widest" style={{ fontSize: "clamp(0.65rem, 0.85vw, 0.8rem)", marginBottom: "1.5vw" }}>
@@ -633,40 +662,40 @@ function FooterSection() {
    Per-firefly wander amplitudes give each one a unique lazy float
    even when the cursor is perfectly still.
 ───────────────────────────────────────────────────────────── */
-const FIREFLY_COUNT = 14;
+const FIREFLY_COUNT = 22;
 
-/* How quickly each firefly interpolates toward its target (lower = lazier) */
+/* Lags are tiered: fast inner core → slow drifting tail.
+   Reduced ~20% across the board so the whole cloud moves a bit
+   more languidly without adding artificial reaction delay. */
 const FIREFLY_LAGS = [
-  0.12, 0.085, 0.07, 0.058, 0.048, 0.04, 0.034,
-  0.028, 0.044, 0.052, 0.036, 0.026, 0.062, 0.032,
+  /* inner core  */ 0.144, 0.124, 0.105, 0.090, 0.076, 0.064, 0.054,
+  /* mid cloud   */ 0.045, 0.038, 0.031, 0.026, 0.022, 0.018, 0.015,
+  /* outer tail  */ 0.014, 0.011, 0.010, 0.013, 0.009, 0.012, 0.008, 0.010,
 ];
 
-/* Base offset from cursor for each firefly (before wander is added) */
+/* Tiny base offsets only — the wander radii do the real spreading.
+   Keeping these near-zero lets the cloud shape emerge organically
+   rather than from a rigid fixed formation. */
 const FIREFLY_OFFSETS = [
-  { x:  0,  y:  0  },
-  { x:  18, y: -16 },
-  { x: -22, y:  11 },
-  { x:  26, y:  21 },
-  { x: -14, y: -27 },
-  { x:  32, y:  -9 },
-  { x: -28, y:  24 },
-  { x:   8, y:  30 },
-  { x: -35, y:  -5 },
-  { x:  24, y: -30 },
-  { x: -10, y:  35 },
-  { x:  38, y:  16 },
-  { x: -20, y: -38 },
-  { x:  12, y:  22 },
+  { x:  0, y:  0 }, { x:  2, y: -1 }, { x: -1, y:  2 }, { x:  2, y:  1 },
+  { x: -2, y: -1 }, { x:  1, y:  2 }, { x: -2, y:  1 }, { x:  1, y: -2 },
+  { x: -1, y: -2 }, { x:  2, y: -2 }, { x: -2, y:  2 }, { x:  1, y:  2 },
+  { x: -1, y:  1 }, { x:  2, y: -1 }, { x: -2, y: -2 }, { x:  1, y:  2 },
+  { x: -1, y: -1 }, { x:  2, y:  1 }, { x: -2, y:  1 }, { x:  1, y: -1 },
+  { x:  1, y:  1 }, { x: -1, y:  0 },
 ];
 
-/* Per-firefly wander parameters — stable random values seeded at module load */
+/* Wander radii grow linearly with index: the innermost firefly
+   barely moves (r≈4px) while the outermost drifts in wide lazy
+   arcs (r≈84px). Combined with the tiered lags this produces a
+   cloud that's dense at the cursor and tapers off into a tail. */
 const FIREFLY_WANDER = Array.from({ length: FIREFLY_COUNT }, (_, i) => ({
-  ax: 0.28 + (i * 0.073) % 0.38,   // x oscillation angular speed (rad/s)
-  ay: 0.22 + (i * 0.059) % 0.32,   // y oscillation angular speed (rad/s)
-  rx: 14 + (i * 7.3)  % 26,        // x wander radius (px)
-  ry: 10 + (i * 5.9)  % 20,        // y wander radius (px)
-  px: (i * 1.37) % (Math.PI * 2),  // x phase offset
-  py: (i * 2.11) % (Math.PI * 2),  // y phase offset
+  ax: 0.22 + (i * 0.041) % 0.30,  // x oscillation speed (rad/s)
+  ay: 0.17 + (i * 0.053) % 0.25,  // y oscillation speed (rad/s)
+  rx: 4  + i * 3.8,                // x radius: 4 → ~84 px
+  ry: 3  + i * 3.0,                // y radius: 3 → ~66 px
+  px: (i * 1.37) % (Math.PI * 2), // x phase
+  py: (i * 2.11) % (Math.PI * 2), // y phase
 }));
 
 /* ─────────────────────────────────────────────────────────────
@@ -707,19 +736,50 @@ export default function Home() {
     if (!jarTipped) return;
     const animate = () => {
       const { x: mx, y: my } = mouseRef.current;
-      const t = Date.now() * 0.001; // time in seconds
+      const t = Date.now() * 0.001;
 
+      /* ── Step 1: move each firefly toward its wandering target ── */
       posRef.current = posRef.current.map((p, i) => {
         const w = FIREFLY_WANDER[i];
-        /* Lissajous-ish wander: sin/cos with different frequencies per axis */
-        const wx = Math.sin(t * w.ax + w.px) * w.rx;
-        const wy = Math.cos(t * w.ay + w.py) * w.ry;
-        const tx = mx + FIREFLY_OFFSETS[i].x + wx;
-        const ty = my + FIREFLY_OFFSETS[i].y + wy;
+
+        /* Primary slow wander — radius breathes so the cloud expands and contracts */
+        const pulse = 0.68 + 0.32 * Math.sin(t * 0.22 + i * 0.85);
+        const wx = Math.sin(t * w.ax + w.px) * w.rx * pulse;
+        const wy = Math.cos(t * w.ay + w.py) * w.ry * pulse;
+
+        /* Secondary turbulence layer — faster, non-harmonic, adds organic jitter */
+        const tx2 = Math.sin(t * w.ax * 4.3 + w.px * 1.9) * w.rx * 0.22;
+        const ty2 = Math.cos(t * w.ay * 3.8 + w.py * 2.3) * w.ry * 0.18;
+
+        const targetX = mx + FIREFLY_OFFSETS[i].x + wx + tx2;
+        const targetY = my + FIREFLY_OFFSETS[i].y + wy + ty2;
+
+        /* Occasional dart — simulates the sudden jink of a real insect */
+        const dart = Math.sin(t * 1.4 + i * 0.97) > 0.82 ? 2.6 : 1.0;
+
         return {
-          x: p.x + (tx - p.x) * FIREFLY_LAGS[i],
-          y: p.y + (ty - p.y) * FIREFLY_LAGS[i],
+          x: p.x + (targetX - p.x) * FIREFLY_LAGS[i] * dart,
+          y: p.y + (targetY - p.y) * FIREFLY_LAGS[i] * dart,
         };
+      });
+
+      /* ── Step 2: separation — gentle repulsion so they spread into a cloud ── */
+      const MIN_SEP = 24;
+      posRef.current = posRef.current.map((p, i) => {
+        let fx = 0, fy = 0;
+        for (let j = 0; j < FIREFLY_COUNT; j++) {
+          if (i === j) continue;
+          const q = posRef.current[j];
+          const dx = p.x - q.x, dy = p.y - q.y;
+          const d2 = dx * dx + dy * dy;
+          if (d2 < MIN_SEP * MIN_SEP && d2 > 0.01) {
+            const d = Math.sqrt(d2);
+            const strength = ((MIN_SEP - d) / MIN_SEP) * 0.9;
+            fx += (dx / d) * strength;
+            fy += (dy / d) * strength;
+          }
+        }
+        return { x: p.x + fx, y: p.y + fy };
       });
 
       setFireflyPositions(posRef.current.map(p => ({ ...p })));
@@ -747,12 +807,11 @@ export default function Home() {
         <div key={i} aria-hidden className="firefly pointer-events-none"
           style={{
             position: "fixed",
-            left: pos.x - 3.5,
-            top:  pos.y - 3.5,
-            width: 7, height: 7,
+            left: pos.x - 2.5,
+            top:  pos.y - 2.5,
+            width: 5, height: 5,
             zIndex: 9999,
-            opacity: !inHero && i > 0 ? 0 : 1,
-            transition: "opacity 0.9s ease",
+            opacity: 1,
             animationDelay: `${i * 0.17}s`,
           }}
         />

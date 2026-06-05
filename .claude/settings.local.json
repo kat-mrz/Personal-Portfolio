@@ -1,7 +1,38 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --no-src-dir --import-alias \"@/*\" --yes)"
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --no-src-dir --import-alias \"@/*\" --yes)",
+      "Bash(npm run *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "Bash(mkdir -p /Users/kat/Desktop/my-portfolio/.claude)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(kill 96858)",
+      "Bash(curl -s http://localhost:3000)",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "Bash(rm /Users/kat/Desktop/my-portfolio/.git/index)",
+      "Bash(git -C /Users/kat/Desktop/my-portfolio reset)",
+      "Bash(git -C /Users/kat/Desktop/my-portfolio add app/page.tsx)",
+      "Bash(git -C /Users/kat/Desktop/my-portfolio commit -m ' *)",
+      "Bash(npx tsc *)",
+      "Bash(git -C /Users/kat/Desktop/my-portfolio add app/page.tsx app/globals.css)",
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(npx next *)",
+      "Bash(echo \"BUILD_EXIT:$?\")",
+      "Bash(jobs)",
+      "Bash(echo \"PID: $!\")",
+      "Read(//tmp/**)",
+      "Bash(kill 57340 57426 57261)",
+      "Bash(pkill -f \"next dev\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/work/project-1)",
+      "Bash(curl -v http://localhost:3000)",
+      "Bash(node_modules/.bin/next dev *)",
+      "Bash(pkill -f \"next dev\" 2>/dev/null; rm -f /Users/kat/Desktop/my-portfolio/.next/_events_*.json 2>/dev/null; echo \"clean\")",
+      "Bash(npm --version)",
+      "Bash(git -C /Users/kat/Desktop/my-portfolio status)",
+      "Bash(git -C /Users/kat/Desktop/my-portfolio diff --stat)",
+      "Bash(git -C /Users/kat/Desktop/my-portfolio restore --staged .)",
+      "Bash(git -C /Users/kat/Desktop/my-portfolio status --short)",
+      "Bash(rm /Users/kat/Desktop/my-portfolio/.git/index.lock && git -C /Users/kat/Desktop/my-portfolio restore --staged . && git -C /Users/kat/Desktop/my-portfolio status --short | head -30)"
     ]
   }
 }
