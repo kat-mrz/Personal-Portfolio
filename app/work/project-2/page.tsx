@@ -6,6 +6,7 @@ import { HeroTextParallax } from "../[slug]/HeroTextParallax";
 import { SwipeDemo } from "./SwipeDemo";
 import { ServingDemo } from "./ServingDemo";
 import { PhoneTiltWrapper } from "./PhoneTiltWrapper";
+import { MealPackDemo } from "./MealPackDemo";
 
 /* ─── Tokens ─────────────────────────────────────────────────── */
 const T = {
@@ -174,8 +175,8 @@ export default function PlateBookPage() {
         backgroundSize: T.dotSize,
         position: "relative",
         overflow: "hidden",
-        paddingTop: "clamp(7rem, 14vw, 12rem)",
-        paddingBottom: "clamp(3.5rem, 7vw, 6rem)",
+        paddingTop: "clamp(5rem, 8vw, 8rem)",
+        paddingBottom: "clamp(2rem, 4vw, 4rem)",
         paddingLeft: T.padX,
         paddingRight: T.padX,
       }}>
@@ -253,7 +254,7 @@ export default function PlateBookPage() {
           display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
           gap: "1px", backgroundColor: "rgba(255,255,255,0.07)",
           border: "1px solid rgba(255,255,255,0.07)",
-          marginTop: "clamp(3rem, 5vw, 5rem)", maxWidth: 1200,
+          marginTop: "clamp(1.5rem, 2.5vw, 2.5rem)", maxWidth: 1200,
         }}>
           {[
             { label: "Role", value: "Designer & Developer" },
@@ -285,8 +286,8 @@ export default function PlateBookPage() {
             {/* Problem */}
             <div style={{ padding: "3rem 2.5rem", backgroundColor: T.mid, borderTop: `3px solid ${T.amber}`, display: "flex", flexDirection: "column" as const, gap: "1.25rem" }}>
               <p style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase" as const, color: T.amber }}>Problem</p>
-              <p style={{ fontFamily: T.serif, fontSize: "clamp(1.4rem,2.2vw,1.9rem)", fontStyle: "italic", color: "#fff", lineHeight: 1.25 }}>
-                Tracking nutrition<br />shouldn't be a job.
+              <p style={{ fontFamily: T.serif, fontSize: "clamp(1.4rem,2.2vw,1.9rem)", color: "#fff", lineHeight: 1.25 }}>
+                Tracking nutrition<br /><em>shouldn't</em> be a job.
               </p>
               <p style={{ fontSize: "clamp(0.9rem,1.05vw,1rem)", color: "rgba(255,255,255,0.5)", lineHeight: 1.85 }}>
                 Most apps ask you to scan barcodes, weigh ingredients, and build a food database from scratch, every single day. Most people quit within a week.
@@ -296,8 +297,8 @@ export default function PlateBookPage() {
             {/* Solution */}
             <div style={{ padding: "3rem 2.5rem", backgroundColor: T.light, borderTop: `3px solid ${T.amber}`, display: "flex", flexDirection: "column" as const, gap: "1.25rem" }}>
               <p style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase" as const, color: T.amber }}>Solution</p>
-              <p style={{ fontFamily: T.serif, fontSize: "clamp(1.4rem,2.2vw,1.9rem)", fontStyle: "italic", color: T.mid, lineHeight: 1.25 }}>
-                A playbook.<br />Not a database.
+              <p style={{ fontFamily: T.serif, fontSize: "clamp(1.4rem,2.2vw,1.9rem)", color: T.mid, lineHeight: 1.25 }}>
+                A playbook built for <em>your</em> routines.
               </p>
 
               {/* Stat */}
@@ -330,12 +331,6 @@ export default function PlateBookPage() {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(2.5rem, 5vw, 6rem)", alignItems: "center" }}>
           <AnimateIn delay={0.05}>
             <div style={{ display: "flex", flexDirection: "column" as const, gap: "clamp(1.1rem, 2.2vw, 2rem)" }}>
-              <p style={{ fontFamily: T.serif, fontStyle: "italic", fontSize: "clamp(1.1rem, 1.6vw, 1.4rem)", color: "rgba(255,255,255,0.75)", lineHeight: 1.45 }}>
-                Two numbers.<br />Every answer.
-              </p>
-              <p style={{ fontSize: "clamp(0.9rem, 1.05vw, 1rem)", color: "rgba(255,255,255,0.48)", lineHeight: 1.85 }}>
-                Two donut charts (calories and protein) front and center. No tabs. Everything you need to make a food decision is above the fold.
-              </p>
               <div style={{ display: "flex", flexDirection: "column" as const, gap: "1.5rem" }}>
                 {[
                   { title: "Greeting that rotates daily", body: "Five time-of-day pools, changes each day. Personal without any setup." },
@@ -417,17 +412,16 @@ export default function PlateBookPage() {
 
       {/* ── FEATURE 3: PLAYBOOK ─────────────────────────────────── */}
       <section style={{ backgroundColor: T.ink, paddingTop: T.padY, paddingBottom: T.padY, paddingLeft: T.padX, paddingRight: T.padX }}>
-        <AnimateIn>
-          <Label light>03 · Playbook</Label>
-          <H2 dark>Your Meal Library</H2>
-        </AnimateIn>
-
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(2.5rem, 5vw, 6rem)", alignItems: "center" }}>
-          <AnimateIn delay={0.05}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(2.5rem, 5vw, 6rem)", alignItems: "start" }}>
+          <AnimateIn>
             <div style={{ display: "flex", flexDirection: "column" as const, gap: "clamp(1.5rem, 3vw, 2.5rem)" }}>
-              <p style={{ fontFamily: T.serif, fontStyle: "italic", fontSize: "clamp(1.1rem, 1.6vw, 1.4rem)", color: "rgba(255,255,255,0.75)", lineHeight: 1.45 }}>
-                Save once.<br />Log forever.
-              </p>
+              <div>
+                <Label light>03 · Playbook</Label>
+                <h2 style={{ fontFamily: T.serif, fontSize: "clamp(1.7rem, 3.2vw, 2.8rem)", fontWeight: 400, color: "#fff", lineHeight: 1.05, letterSpacing: "0.05em", marginBottom: "0.6rem", WebkitFontSmoothing: "antialiased" }}>Your Meal Library</h2>
+                <p style={{ fontFamily: T.serif, fontStyle: "italic", fontSize: "clamp(1rem, 1.4vw, 1.25rem)", color: "rgba(255,255,255,0.55)", lineHeight: 1.45 }}>
+                  Save once. Log forever.
+                </p>
+              </div>
               <p style={{ fontSize: "clamp(0.9rem, 1.05vw, 1rem)", color: "rgba(255,255,255,0.48)", lineHeight: 1.85 }}>
                 Add a meal with a name, calories, protein, and optional notes. After that it's a single tap (with a serving scale modal if the portion changes).
               </p>
@@ -448,12 +442,12 @@ export default function PlateBookPage() {
               </div>
             </div>
           </AnimateIn>
-          <AnimateIn delay={0.15}>
+          <AnimateIn delay={0.1}>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem", alignItems: "start" }}>
               <PhoneTiltWrapper>
                 <Phone src="/pb-playbook.png" screenLabel="Playbook: meal cards with macro pills, P/C ratio" tint="#f9f9f9" />
               </PhoneTiltWrapper>
-              <div style={{ marginTop: "3rem" }}>
+              <div style={{ marginTop: "2rem" }}>
                 <ServingDemo />
               </div>
             </div>
@@ -462,10 +456,14 @@ export default function PlateBookPage() {
       </section>
 
       {/* ── FEATURE 4: ANALYTICS ─────────────────────────────────── */}
-      <section style={{ backgroundColor: T.light, paddingTop: T.padY, paddingBottom: T.padY, paddingLeft: T.padX, paddingRight: T.padX }}>
+      <section style={{
+        backgroundColor: T.ink,
+        backgroundImage: T.dots, backgroundSize: T.dotSize,
+        paddingTop: T.padY, paddingBottom: T.padY, paddingLeft: T.padX, paddingRight: T.padX,
+      }}>
         <AnimateIn>
-          <Label>04 · Analytics</Label>
-          <H2>Patterns Over Perfection</H2>
+          <Label light>04 · Analytics</Label>
+          <H2 dark>Patterns Over Perfection</H2>
         </AnimateIn>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(2.5rem, 5vw, 6rem)", alignItems: "center" }}>
@@ -475,14 +473,7 @@ export default function PlateBookPage() {
             </PhoneTiltWrapper>
           </AnimateIn>
           <AnimateIn delay={0.15}>
-            <div style={{ display: "flex", flexDirection: "column" as const, gap: "clamp(1.1rem, 2.2vw, 2rem)" }}>
-              <p style={{ fontFamily: T.serif, fontStyle: "italic", fontSize: "clamp(1.1rem, 1.6vw, 1.4rem)", color: T.mid, lineHeight: 1.45 }}>
-                Consistency is the metric<br />that actually matters.
-              </p>
-              <p style={{ fontSize: "clamp(0.9rem, 1.05vw, 1rem)", color: T.muted, lineHeight: 1.85 }}>
-                A monthly calendar marks days where you hit both goals. The pattern of green cells tells you more than a daily calorie count ever could.
-              </p>
-              <div style={{ display: "flex", flexDirection: "column" as const, gap: "1rem" }}>
+            <div style={{ display: "flex", flexDirection: "column" as const, gap: "1.25rem" }}>
                 {[
                   { title: "Goal-aware marking", body: "Cut/recomp = under limit. Bulk = hit minimum. Maintain = within 10%. Each mode defines a green day differently." },
                   { title: "Streak counter", body: "Consecutive days with both goals met. A simple retention hook." },
@@ -490,11 +481,10 @@ export default function PlateBookPage() {
                   { title: "Targets set by science", body: "Goals are calculated using Mifflin-St Jeor BMR with activity multipliers. Protein targets scale from 1.4 g/kg (maintain) to 2.2 g/kg (recomp), based on published research." },
                 ].map(({ title, body }) => (
                   <div key={title} style={{ borderLeft: `3px solid ${T.amber}`, paddingLeft: "1.25rem" }}>
-                    <p style={{ fontSize: "0.8rem", fontWeight: 700, color: T.mid, marginBottom: "0.25rem" }}>{title}</p>
-                    <p style={{ fontSize: "0.82rem", color: T.muted, lineHeight: 1.65 }}>{body}</p>
+                    <p style={{ fontSize: "0.8rem", fontWeight: 700, color: "rgba(255,255,255,0.75)", marginBottom: "0.25rem" }}>{title}</p>
+                    <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.42)", lineHeight: 1.65 }}>{body}</p>
                   </div>
                 ))}
-              </div>
             </div>
           </AnimateIn>
         </div>
@@ -568,32 +558,10 @@ export default function PlateBookPage() {
             </p>
           </AnimateIn>
           <AnimateIn delay={0.1}>
-            <div style={{
-              padding: "2.5rem 3rem",
-              backgroundColor: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.06)",
-              borderLeft: `3px solid ${T.amber}`,
-            }}>
-              <p style={{
-                fontFamily: T.serif, fontStyle: "italic",
-                fontSize: "clamp(1.15rem, 1.8vw, 1.5rem)",
-                color: "rgba(255,255,255,0.65)", lineHeight: 1.5, marginBottom: "1.5rem",
-              }}>
-                "Share your rotation.<br />Skip the cold start."
-              </p>
-              <div style={{ display: "flex", flexDirection: "column" as const, gap: "0.6rem" }}>
-                {[
-                  "No backend needed — file-based import/export",
-                  "Curated packs per goal: cut, bulk, maintain",
-                  "One tap to add a full meal library",
-                ].map(item => (
-                  <div key={item} style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start" }}>
-                    <span style={{ color: T.amber, fontSize: "0.7rem", marginTop: "0.25rem", flexShrink: 0 }}>—</span>
-                    <p style={{ fontSize: "0.84rem", color: "rgba(255,255,255,0.4)", lineHeight: 1.6 }}>{item}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <p style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.3)", marginBottom: "0.75rem" }}>
+              Try it
+            </p>
+            <MealPackDemo />
           </AnimateIn>
         </div>
       </section>
@@ -613,7 +581,7 @@ export default function PlateBookPage() {
               <p style={{ fontFamily: T.serif, fontSize: "clamp(2rem, 3.5vw, 3rem)", color: T.mid, lineHeight: 1, marginBottom: "0.5rem" }}>Glook</p>
               <p style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: T.amber, marginBottom: "1.5rem" }}>iOS · React Native</p>
               <div style={{ display: "flex", gap: "1.5rem" }}>
-                {[{ v: "Expo 54", l: "Stack" }, { v: "Pink", l: "Identity" }, { v: "2024", l: "Year" }].map(({ v, l }) => (
+                {[{ v: "Expo 54", l: "Stack" }, { v: "AsyncStorage", l: "Data" }, { v: "Figma", l: "Design" }].map(({ v, l }) => (
                   <div key={l}>
                     <p style={{ fontFamily: T.serif, fontSize: "1.1rem", color: T.mid, lineHeight: 1 }}>{v}</p>
                     <p style={{ fontSize: "0.58rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "rgba(13,27,62,0.35)", marginTop: "0.2rem" }}>{l}</p>
