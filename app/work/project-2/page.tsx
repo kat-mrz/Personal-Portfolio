@@ -5,6 +5,7 @@ import { AnimateIn } from "../[slug]/AnimateIn";
 import { HeroTextParallax } from "../[slug]/HeroTextParallax";
 import { SwipeDemo } from "./SwipeDemo";
 import { ServingDemo } from "./ServingDemo";
+import { PhoneTiltWrapper } from "./PhoneTiltWrapper";
 
 /* ─── Tokens ─────────────────────────────────────────────────── */
 const T = {
@@ -59,7 +60,7 @@ function H2({ children, dark = false }: { children: React.ReactNode; dark?: bool
 
 function Phone({ tint = "#1C1C1C", screenLabel, src }: { tint?: string; screenLabel?: string; src?: string }) {
   return (
-    <div className="phone-wrap" style={{ width: "100%", maxWidth: 280, margin: "0 auto", position: "relative" }}>
+    <div style={{ width: "100%", maxWidth: 280, margin: "0 auto", position: "relative" }}>
       <div style={{
         width: "100%", aspectRatio: "9/19.5",
         backgroundColor: "#111",
@@ -135,28 +136,16 @@ export default function PlateBookPage() {
       <style>{`
         /* ── Playbook feature cells ── */
         .pb-cell {
-          padding: 1.4rem 1.5rem;
-          background: rgba(255,255,255,0.04);
-          transition: background 0.2s ease, transform 0.2s ease;
+          padding: 1.6rem 1.75rem;
+          background: rgba(255,255,255,0.03);
+          border-top: 1px solid rgba(255,255,255,0.06);
+          transition: background 0.2s ease;
           cursor: default;
         }
         .pb-cell:hover {
-          background: rgba(255,255,255,0.09);
-          transform: translateY(-2px);
+          background: rgba(255,255,255,0.07);
         }
         .pb-cell:hover .pb-cell-title { color: ${T.limeViv}; }
-
-        /* ── Phone hover tilt ── */
-        .phone-wrap {
-          transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1),
-                      filter 0.45s ease;
-          will-change: transform;
-        }
-        .phone-wrap:hover {
-          transform: perspective(900px) rotateY(-5deg) rotateX(2deg)
-                     translateY(-12px) scale(1.04);
-          filter: drop-shadow(0 28px 48px rgba(0,0,0,0.45));
-        }
       `}</style>
 
       {/* ── Nav ─────────────────────────────────────────────────── */}
@@ -193,8 +182,8 @@ export default function PlateBookPage() {
         <div style={{
           position: "relative", zIndex: 1,
           display: "grid",
-          gridTemplateColumns: "1fr clamp(200px, 28%, 300px)",
-          gap: "clamp(3rem, 6vw, 7rem)",
+          gridTemplateColumns: "1fr clamp(280px, 38%, 400px)",
+          gap: "clamp(3rem, 5vw, 6rem)",
           alignItems: "center",
           maxWidth: 1200,
         }}>
@@ -215,8 +204,8 @@ export default function PlateBookPage() {
 
             <p style={{
               fontFamily: T.serif, fontStyle: "italic",
-              fontSize: "clamp(0.95rem, 1.3vw, 1.1rem)",
-              color: "rgba(255,255,255,0.45)", marginBottom: "0.75rem",
+              fontSize: "clamp(1rem, 1.4vw, 1.2rem)",
+              color: "rgba(255,255,255,0.6)", marginBottom: "0.85rem",
             }}>
               A meal tracking app you'll actually keep using
             </p>
@@ -238,23 +227,22 @@ export default function PlateBookPage() {
               Build a library of the meals you already eat. Log them in one tap. Let the app figure out the rest.
             </p>
 
-            <div style={{ display: "flex", gap: "clamp(1.5rem, 3vw, 3rem)", flexWrap: "wrap" as const }}>
+            <div style={{ display: "flex", gap: "clamp(2rem, 4vw, 4rem)", flexWrap: "wrap" as const }}>
               {[
                 { value: "5", label: "Screens" },
                 { value: "0", label: "Logins" },
                 { value: "1", label: "Suggestion Engine" },
-                { value: "2024", label: "Year Built" },
               ].map(({ value, label }) => (
-                <div key={label} style={{ borderLeft: `3px solid ${T.amber}`, paddingLeft: "1rem" }}>
-                  <p style={{ fontFamily: T.serif, fontSize: "clamp(1.6rem, 2.8vw, 2.2rem)", color: "#fff", lineHeight: 1, marginBottom: "0.2rem" }}>{value}</p>
+                <div key={label} style={{ borderLeft: `3px solid ${T.amber}`, paddingLeft: "1.1rem" }}>
+                  <p style={{ fontFamily: T.serif, fontSize: "clamp(1.8rem, 3vw, 2.5rem)", color: "#fff", lineHeight: 1, marginBottom: "0.25rem" }}>{value}</p>
                   <p style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.35)" }}>{label}</p>
                 </div>
               ))}
             </div>
           </HeroTextParallax>
 
-          {/* Right — phone */}
-          <div style={{ display: "flex", justifyContent: "center" }}>
+          {/* Right — phone (parallax only, no hover tilt) */}
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
             <Phone src="/pb-home.png" screenLabel="Home screen: calories & protein donut charts" tint="#1C1C1C" />
           </div>
         </div>
@@ -262,20 +250,20 @@ export default function PlateBookPage() {
         {/* Role strip */}
         <div style={{
           position: "relative", zIndex: 1,
-          display: "grid", gridTemplateColumns: "repeat(5, 1fr)",
-          gap: "1px", backgroundColor: "rgba(255,255,255,0.06)",
-          marginTop: "clamp(2.5rem, 4vw, 4rem)", maxWidth: 1200,
+          display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
+          gap: "1px", backgroundColor: "rgba(255,255,255,0.07)",
+          border: "1px solid rgba(255,255,255,0.07)",
+          marginTop: "clamp(3rem, 5vw, 5rem)", maxWidth: 1200,
         }}>
           {[
             { label: "Role", value: "Designer & Developer" },
             { label: "Platform", value: "iOS · React Native" },
             { label: "Stack", value: "Expo SDK 54 · AsyncStorage" },
             { label: "Tools", value: "Figma · Claude Code" },
-            { label: "Type", value: "Personal Project" },
           ].map(({ label, value }) => (
-            <div key={label} style={{ backgroundColor: "rgba(255,255,255,0.02)", padding: "1.5rem 1.75rem" }}>
-              <p style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.3)", marginBottom: "0.4rem" }}>{label}</p>
-              <p style={{ fontSize: "clamp(0.85rem, 1vw, 0.95rem)", color: "rgba(255,255,255,0.75)", fontWeight: 500 }}>{value}</p>
+            <div key={label} style={{ backgroundColor: T.ink, padding: "1.5rem 1.75rem" }}>
+              <p style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase" as const, color: T.amber, marginBottom: "0.45rem" }}>{label}</p>
+              <p style={{ fontSize: "clamp(0.82rem, 0.95vw, 0.92rem)", color: "rgba(255,255,255,0.55)", fontWeight: 500, lineHeight: 1.4 }}>{value}</p>
             </div>
           ))}
         </div>
@@ -348,24 +336,15 @@ export default function PlateBookPage() {
               <p style={{ fontSize: "clamp(0.9rem, 1.05vw, 1rem)", color: "rgba(255,255,255,0.48)", lineHeight: 1.85 }}>
                 Two donut charts (calories and protein) front and center. No tabs. Everything you need to make a food decision is above the fold.
               </p>
-              <div style={{ display: "flex", flexDirection: "column" as const, gap: "0.85rem" }}>
+              <div style={{ display: "flex", flexDirection: "column" as const, gap: "1.5rem" }}>
                 {[
-                  { icon: "⏰", title: "Greeting that rotates daily", body: "Five time-of-day pools, changes each day. Personal without needing any setup." },
-                  { icon: "←", title: "Swipe to remove", body: "Swipe left on any logged meal to delete it. No confirmation dialog." },
-                  { icon: "⚡", title: "Live progress pills", body: "Remaining calories and protein update in real time. Pills go red near the limit." },
-                ].map(({ icon, title, body }) => (
-                  <div key={title} style={{
-                    display: "flex", gap: "1rem", alignItems: "flex-start",
-                    padding: "1.1rem 1.4rem",
-                    backgroundColor: "rgba(255,255,255,0.03)",
-                    border: "1px solid rgba(255,255,255,0.07)",
-                    borderLeft: `3px solid ${T.amber}`,
-                  }}>
-                    <span style={{ fontSize: "1rem", flexShrink: 0, marginTop: "0.1rem" }}>{icon}</span>
-                    <div>
-                      <p style={{ fontSize: "0.8rem", fontWeight: 700, color: "rgba(255,255,255,0.65)", marginBottom: "0.25rem" }}>{title}</p>
-                      <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.35)", lineHeight: 1.65 }}>{body}</p>
-                    </div>
+                  { title: "Greeting that rotates daily", body: "Five time-of-day pools, changes each day. Personal without any setup." },
+                  { title: "Swipe to remove", body: "Swipe left on any logged meal to delete it. No confirmation dialog." },
+                  { title: "Live progress pills", body: "Remaining calories and protein update in real time. Pills go red near the limit." },
+                ].map(({ title, body }) => (
+                  <div key={title} style={{ borderLeft: `2px solid ${T.amber}`, paddingLeft: "1.25rem" }}>
+                    <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "rgba(255,255,255,0.75)", marginBottom: "0.3rem" }}>{title}</p>
+                    <p style={{ fontSize: "0.88rem", color: "rgba(255,255,255,0.4)", lineHeight: 1.7 }}>{body}</p>
                   </div>
                 ))}
               </div>
@@ -380,7 +359,9 @@ export default function PlateBookPage() {
             </div>
           </AnimateIn>
           <AnimateIn delay={0.15}>
-            <Phone src="/pb-home.png" screenLabel="Home: donut charts, today's meal log" tint="#1C1C1C" />
+            <PhoneTiltWrapper>
+              <Phone src="/pb-home.png" screenLabel="Home: donut charts, today's meal log" tint="#1C1C1C" />
+            </PhoneTiltWrapper>
           </AnimateIn>
         </div>
       </section>
@@ -394,7 +375,9 @@ export default function PlateBookPage() {
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(2.5rem, 5vw, 6rem)", alignItems: "center" }}>
           <AnimateIn delay={0.05}>
-            <Phone src="/pb-suggestions.png" screenLabel="Suggestions: meal picks with reasoning" tint="#f9f9f9" />
+            <PhoneTiltWrapper>
+              <Phone src="/pb-suggestions.png" screenLabel="Suggestions: meal picks with reasoning" tint="#f9f9f9" />
+            </PhoneTiltWrapper>
           </AnimateIn>
           <AnimateIn delay={0.15}>
             <div style={{ display: "flex", flexDirection: "column" as const, gap: "clamp(1.5rem, 3vw, 2.5rem)" }}>
@@ -408,22 +391,19 @@ export default function PlateBookPage() {
                 <p style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase" as const, color: T.amber, marginBottom: "1rem" }}>
                   How it scores
                 </p>
-                <div style={{ display: "flex", flexDirection: "column" as const, gap: "0.65rem" }}>
+                <div style={{ display: "flex", flexDirection: "column" as const, gap: "0.85rem" }}>
                   {[
                     { factor: "Protein density", note: "protein ÷ calories" },
                     { factor: "Protein coverage", note: "how much of your gap this fills" },
                     { factor: "Time-of-day boost", note: "meals you eat around now score up to 2.5×" },
                   ].map(({ factor, note }, i) => (
-                    <div key={factor} style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
+                    <div key={factor} style={{ display: "flex", alignItems: "baseline", gap: "1rem" }}>
                       <span style={{
-                        width: 20, height: 20, borderRadius: "50%",
-                        backgroundColor: T.amber, color: T.ink,
-                        fontSize: "0.6rem", fontWeight: 800,
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        flexShrink: 0, marginTop: "0.1rem",
+                        fontFamily: T.serif, fontSize: "1.35rem", fontWeight: 400,
+                        color: T.amber, lineHeight: 1, flexShrink: 0, width: "1.2rem",
                       }}>{i + 1}</span>
                       <div>
-                        <p style={{ fontSize: "0.82rem", fontWeight: 700, color: T.mid }}>{factor}</p>
+                        <p style={{ fontSize: "0.84rem", fontWeight: 700, color: T.mid }}>{factor}</p>
                         <p style={{ fontSize: "0.78rem", color: T.muted, lineHeight: 1.55 }}>{note}</p>
                       </div>
                     </div>
@@ -470,7 +450,9 @@ export default function PlateBookPage() {
           </AnimateIn>
           <AnimateIn delay={0.15}>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem", alignItems: "start" }}>
-              <Phone src="/pb-playbook.png" screenLabel="Playbook: meal cards with macro pills, P/C ratio" tint="#f9f9f9" />
+              <PhoneTiltWrapper>
+                <Phone src="/pb-playbook.png" screenLabel="Playbook: meal cards with macro pills, P/C ratio" tint="#f9f9f9" />
+              </PhoneTiltWrapper>
               <div style={{ marginTop: "3rem" }}>
                 <ServingDemo />
               </div>
@@ -488,7 +470,9 @@ export default function PlateBookPage() {
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(2.5rem, 5vw, 6rem)", alignItems: "center" }}>
           <AnimateIn delay={0.05}>
-            <Phone src="/pb-analytics.png" screenLabel="Analytics: monthly calendar, streak, trend charts" tint="#1C1C1C" />
+            <PhoneTiltWrapper>
+              <Phone src="/pb-analytics.png" screenLabel="Analytics: monthly calendar, streak, trend charts" tint="#1C1C1C" />
+            </PhoneTiltWrapper>
           </AnimateIn>
           <AnimateIn delay={0.15}>
             <div style={{ display: "flex", flexDirection: "column" as const, gap: "clamp(1.1rem, 2.2vw, 2rem)" }}>
@@ -557,7 +541,7 @@ export default function PlateBookPage() {
             <p style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase" as const, color: T.amber, marginBottom: "1.5rem" }}>Typography</p>
             <div style={{ display: "flex", flexDirection: "column" as const, gap: "2rem" }}>
               <div style={{ borderLeft: `3px solid ${T.amber}`, paddingLeft: "1.5rem" }}>
-                <p style={{ fontSize: "clamp(1.6rem, 2.5vw, 2.2rem)", color: T.mid, fontWeight: 700, letterSpacing: "2px", marginBottom: "0.3rem", lineHeight: 1 }}>MILKER</p>
+                <p style={{ fontSize: "clamp(1.6rem, 2.5vw, 2.2rem)", color: T.mid, fontWeight: 700, letterSpacing: "2px", marginBottom: "0.3rem", lineHeight: 1 }}>MILKER BOLD</p>
                 <p style={{ fontSize: "0.72rem", color: T.muted }}>Display · hero numbers · page titles</p>
               </div>
               <div style={{ borderLeft: `3px solid rgba(13,27,62,0.15)`, paddingLeft: "1.5rem" }}>
@@ -574,36 +558,74 @@ export default function PlateBookPage() {
       </section>
 
       {/* ── WHAT'S NEXT ─────────────────────────────────────────── */}
-      <section style={{ backgroundColor: T.ink, paddingTop: "clamp(3rem, 6vw, 6rem)", paddingBottom: "clamp(3rem, 6vw, 6rem)", paddingLeft: T.padX, paddingRight: T.padX }}>
-        <div style={{ maxWidth: 720 }}>
+      <section style={{ backgroundColor: T.ink, paddingTop: T.padY, paddingBottom: T.padY, paddingLeft: T.padX, paddingRight: T.padX }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(3rem, 6vw, 7rem)", alignItems: "center", maxWidth: 1200 }}>
           <AnimateIn>
             <Label light>What's Next</Label>
             <H2 dark>Meal packs: shareable playbook templates</H2>
+            <p style={{ fontSize: "clamp(0.95rem, 1.1vw, 1.05rem)", color: "rgba(255,255,255,0.5)", lineHeight: 1.9 }}>
+              The playbook format maps naturally to sharing. A "meal pack" — a curated set of playbook entries for a specific goal — could export as a file and import in one tap. It would solve the cold-start problem and let people share what's working, without needing a backend.
+            </p>
           </AnimateIn>
           <AnimateIn delay={0.1}>
-            <p style={{ fontSize: "clamp(0.95rem, 1.1vw, 1.05rem)", color: "rgba(255,255,255,0.5)", lineHeight: 1.9 }}>
-              The playbook format maps naturally to sharing. A "meal pack" (a curated set of playbook entries for a specific goal) could export as a file and import in one tap. It would solve the cold-start problem and let people share what's working, without needing a backend.
-            </p>
+            <div style={{
+              padding: "2.5rem 3rem",
+              backgroundColor: "rgba(255,255,255,0.03)",
+              border: "1px solid rgba(255,255,255,0.06)",
+              borderLeft: `3px solid ${T.amber}`,
+            }}>
+              <p style={{
+                fontFamily: T.serif, fontStyle: "italic",
+                fontSize: "clamp(1.15rem, 1.8vw, 1.5rem)",
+                color: "rgba(255,255,255,0.65)", lineHeight: 1.5, marginBottom: "1.5rem",
+              }}>
+                "Share your rotation.<br />Skip the cold start."
+              </p>
+              <div style={{ display: "flex", flexDirection: "column" as const, gap: "0.6rem" }}>
+                {[
+                  "No backend needed — file-based import/export",
+                  "Curated packs per goal: cut, bulk, maintain",
+                  "One tap to add a full meal library",
+                ].map(item => (
+                  <div key={item} style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start" }}>
+                    <span style={{ color: T.amber, fontSize: "0.7rem", marginTop: "0.25rem", flexShrink: 0 }}>—</span>
+                    <p style={{ fontSize: "0.84rem", color: "rgba(255,255,255,0.4)", lineHeight: 1.6 }}>{item}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </AnimateIn>
         </div>
       </section>
 
       {/* ── GLOOK ───────────────────────────────────────────────── */}
-      <section style={{ backgroundColor: T.light, paddingTop: "clamp(2.5rem, 4.5vw, 4.5rem)", paddingBottom: "clamp(2.5rem, 4.5vw, 4.5rem)", paddingLeft: T.padX, paddingRight: T.padX }}>
+      <section style={{ backgroundColor: T.light, paddingTop: T.padY, paddingBottom: T.padY, paddingLeft: T.padX, paddingRight: T.padX }}>
         <AnimateIn>
           <Label>Related Project</Label>
+        </AnimateIn>
+        <AnimateIn delay={0.05}>
           <div style={{
-            display: "grid", gridTemplateColumns: "auto 1fr", gap: "clamp(2rem, 4vw, 4rem)",
-            alignItems: "center", maxWidth: 860,
-            borderLeft: `3px solid ${T.amber}`, paddingLeft: "2rem",
+            display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(2rem, 5vw, 5rem)",
+            alignItems: "start", maxWidth: 1000,
+            borderTop: `3px solid ${T.amber}`, paddingTop: "2.5rem",
           }}>
             <div>
-              <p style={{ fontFamily: T.serif, fontSize: "clamp(1.6rem, 2.5vw, 2.2rem)", color: T.mid, lineHeight: 1, marginBottom: "0.3rem" }}>Glook</p>
-              <p style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: T.amber }}>iOS · React Native</p>
+              <p style={{ fontFamily: T.serif, fontSize: "clamp(2rem, 3.5vw, 3rem)", color: T.mid, lineHeight: 1, marginBottom: "0.5rem" }}>Glook</p>
+              <p style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: T.amber, marginBottom: "1.5rem" }}>iOS · React Native</p>
+              <div style={{ display: "flex", gap: "1.5rem" }}>
+                {[{ v: "Expo 54", l: "Stack" }, { v: "Pink", l: "Identity" }, { v: "2024", l: "Year" }].map(({ v, l }) => (
+                  <div key={l}>
+                    <p style={{ fontFamily: T.serif, fontSize: "1.1rem", color: T.mid, lineHeight: 1 }}>{v}</p>
+                    <p style={{ fontSize: "0.58rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "rgba(13,27,62,0.35)", marginTop: "0.2rem" }}>{l}</p>
+                  </div>
+                ))}
+              </div>
             </div>
-            <p style={{ fontSize: "clamp(0.9rem, 1.05vw, 1rem)", color: T.muted, lineHeight: 1.8 }}>
-              A companion app applying the same one-tap logging model to glucose management. Tracks daily carbs and fiber intake against personal goals, designed for health-conscious users and those managing prediabetes. Built with the same stack (Expo SDK 54, React Native) with a distinct pink visual identity.
-            </p>
+            <div>
+              <p style={{ fontSize: "clamp(0.9rem, 1.05vw, 1rem)", color: T.muted, lineHeight: 1.85 }}>
+                A companion app applying the same one-tap logging model to glucose management. Tracks daily carbs and fiber intake against personal goals — designed for health-conscious users and those managing prediabetes. Built on the same stack with a distinct pink visual identity.
+              </p>
+            </div>
           </div>
         </AnimateIn>
       </section>
