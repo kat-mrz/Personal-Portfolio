@@ -1,28 +1,49 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Inter } from "next/font/google";
+import localFont from "next/font/local";
+import { Instrument_Serif, Instrument_Sans, Manrope } from "next/font/google";
 import "./globals.css";
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
-  subsets: ["latin"],
-  weight: ["700", "800", "900"],
+/* Ruigslay — "Portfolio" display text only */
+const display = localFont({
+  src: [{ path: "./fonts/Ruigslay.ttf", weight: "400", style: "normal" }],
+  variable: "--font-display",
+  adjustFontFallback: false,
 });
 
-const inter = Inter({
+/* Instrument Serif — all headings */
+const playfair = Instrument_Serif({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+});
+
+/* Instrument Sans — UI text / bio copy */
+const instrumentSans = Instrument_Sans({
+  variable: "--font-instrument-sans",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+});
+
+/* Manrope — body copy */
+const inter = Manrope({
   variable: "--font-inter",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "Portfolio — Your Name",
-  description: "Personal portfolio of a graphic designer and creative.",
+  title: "Katrina Mrzljak",
+  description: "Portfolio of Katrina Mrzljak — product designer and design engineer crafting elevated, immersive digital experiences.",
+  icons: { icon: "/favicon.svg" },
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
+    <html lang="en" className={`${display.variable} ${playfair.variable} ${instrumentSans.variable} ${inter.variable}`}>
       <body className="antialiased">{children}</body>
     </html>
   );

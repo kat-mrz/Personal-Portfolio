@@ -4,7 +4,6 @@
   --color-midnight: #0d1b3e;
   --color-near-white: #f0f4ff;
   --color-amber: #e8a020;
-  --font-serif: var(--font-playfair);
   --font-sans: var(--font-inter);
 }
 
@@ -16,6 +15,7 @@ body {
   margin: 0;
   font-family: var(--font-inter), sans-serif;
   background-color: #f0f4ff;
+  overflow-x: hidden; /* prevent horizontal scroll from off-screen positioned elements */
 }
 
 /* ── Grain / paper texture overlay ────────────────────────────
@@ -38,6 +38,29 @@ body::before {
 
 .font-serif {
   font-family: var(--font-playfair), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "liga" 1, "calt" 1, "clig" 1, "kern" 1;
+  font-variant-ligatures: common-ligatures contextual;
+}
+
+/* Global thinning for all elements using the serif/display font —
+   font-weight is forced to 400 so browsers never synthesise bold,
+   and font-smoothing is set to subpixel for the finest rendering. */
+*:where([style*="--font-display"]),
+.font-display {
+  font-weight: 400 !important;
+  -webkit-font-smoothing: subpixel-antialiased;
+  font-synthesis: none;
+}
+
+/* Zaslia display accent */
+.font-display {
+  font-family: var(--font-display), Georgia, serif;
+  -webkit-text-stroke: 0.4px currentColor;
+  font-feature-settings: "liga" 1, "calt" 1, "clig" 1, "kern" 1;
+  font-variant-ligatures: common-ligatures contextual;
 }
 
 /* Star twinkle — opacity + scale on the inner element.
@@ -57,16 +80,39 @@ body::before {
   animation: firefly-in-jar 1.8s ease-in-out infinite;
 }
 
-/* Firefly ambient pulse — only box-shadow so it doesn't conflict
-   with the React-controlled opacity transition */
-@keyframes firefly-glow {
-  0%, 100% { box-shadow: 0 0 4px 2px rgba(232, 200, 40, 0.5); }
-  50%       { box-shadow: 0 0 9px 4px rgba(232, 200, 40, 0.9); }
+/* Jar shake on click */
+@keyframes jar-shake {
+  0%, 100% { transform: rotate(0deg) translateX(0px);   }
+  15%       { transform: rotate(-3deg) translateX(-5px); }
+  32%       { transform: rotate(3deg)  translateX(5px);  }
+  50%       { transform: rotate(-2deg) translateX(-3px); }
+  70%       { transform: rotate(2deg)  translateX(3px);  }
+  88%       { transform: rotate(-1deg) translateX(-1px); }
 }
+.jar-shaking {
+  animation: jar-shake 0.44s ease;
+}
+
+/* Lid flying off after shake */
+@keyframes lid-fly {
+  0%   { transform: translateY(0px)   rotate(0deg);  opacity: 1;   }
+  35%  { transform: translateY(-28px) rotate(12deg); opacity: 0.9; }
+  100% { transform: translateY(-90px) rotate(28deg); opacity: 0;   }
+}
+/* transform-box so the SVG <g> rotates around its own centre */
+.lid-group {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.lid-flying {
+  animation: lid-fly 0.58s ease-out forwards;
+}
+
+/* Firefly base — movement and glow are driven by inline CSS animations
+   (ff-blink, ffx{i}, ffy{i}) injected as a <style> tag at runtime. */
 .firefly {
   background-color: #e8c828;
   border-radius: 50%;
-  animation: firefly-glow 1.5s ease-in-out infinite;
 }
 
 /* Hero section — slow drifting gradient.
@@ -91,4 +137,34 @@ body::before {
   );
   background-size: 220% 220%;
   animation: hero-gradient 22s ease infinite;
+}
+
+/* Firefly dots — GPU-composited layer so the RAF transform loop is cheap */
+.firefly {
+  will-change: transform;
+}
+
+/* Honour user's motion preference — collapse all animations to a single frame */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Arch window — same drifting night-sky gradient as the hero */
+.arch-bg {
+  background: linear-gradient(
+    140deg,
+    #07101f 0%,
+    #0d1b3e 22%,
+    #0f2550 44%,
+    #0b1836 60%,
+    #091228 78%,
+    #0e1e42 100%
+  );
+  background-size: 240% 240%;
+  animation: hero-gradient 18s ease infinite;
 }
