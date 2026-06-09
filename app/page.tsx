@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import PlateBookCard from "./PlateBookCard";
 
 /* ─────────────────────────────────────────────────────────────
    SCROLL-REVEAL HOOK
@@ -876,9 +877,13 @@ function WorkSection() {
   const cards = (cols: number, gap: string, pad: string) => (
     <div style={{ display: "grid", gridTemplateColumns: `repeat(${cols}, 1fr)`, gap }}>
       {projects.map((p, i) => {
-        /* First card gets the video treatment */
+        /* First card — Dualité video treatment */
         if (i === 0 && p.href) {
           return <VideoCard key={i} href={p.href} title={p.title} tag={p.tag} badge={p.badge} pad={pad} />;
+        }
+        /* Second card — PlateBook animated card */
+        if (i === 1 && p.href) {
+          return <PlateBookCard key={i} href={p.href} tag={p.tag} pad={pad} />;
         }
         return (
           <a key={i} href={p.href}
@@ -1248,7 +1253,7 @@ export default function Home() {
         // Jar centre in screen coords — used for grace-period proximity check
         const jarScrX = window.innerWidth * 0.60 + 40;  // left:60% + half SVG width
         const jarScrY = (heroRef.current?.getBoundingClientRect().bottom ?? 0) - 41; // body centre
-        const JAR_R   = 65; // px — roughly the glass body radius
+        const JAR_R   = 110; // px — protection zone around the jar
 
         const rects = ffRefs.current.map(el =>
           el && el.style.opacity === '1' ? el.getBoundingClientRect() : null

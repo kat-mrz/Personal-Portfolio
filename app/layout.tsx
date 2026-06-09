@@ -10,6 +10,13 @@ const display = localFont({
   adjustFontFallback: false,
 });
 
+/* Milker — PlateBook brand display font */
+const milker = localFont({
+  src: [{ path: "../public/Milker.otf", weight: "400", style: "normal" }],
+  variable: "--font-milker",
+  adjustFontFallback: false,
+});
+
 /* Instrument Serif — all headings */
 const playfair = Instrument_Serif({
   variable: "--font-playfair",
@@ -43,7 +50,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${display.variable} ${playfair.variable} ${instrumentSans.variable} ${inter.variable}`}>
+    <html lang="en" className={`${display.variable} ${playfair.variable} ${instrumentSans.variable} ${inter.variable} ${milker.variable}`}>
       <body className="antialiased">{children}</body>
     </html>
   );
