@@ -1,7 +1,10 @@
 import Link from "next/link";
+import Image from "next/image";
 import { CursorTracker } from "../[slug]/CursorTracker";
 import { AnimateIn } from "../[slug]/AnimateIn";
 import { HeroTextParallax } from "../[slug]/HeroTextParallax";
+import { SwipeDemo } from "./SwipeDemo";
+import { ServingDemo } from "./ServingDemo";
 
 /* ─── Tokens ─────────────────────────────────────────────────── */
 const T = {
@@ -54,9 +57,9 @@ function H2({ children, dark = false }: { children: React.ReactNode; dark?: bool
   );
 }
 
-function Phone({ tint = "#1C1C1C", screenLabel }: { tint?: string; screenLabel?: string }) {
+function Phone({ tint = "#1C1C1C", screenLabel, src }: { tint?: string; screenLabel?: string; src?: string }) {
   return (
-    <div style={{ width: "100%", maxWidth: 280, margin: "0 auto", position: "relative" }}>
+    <div className="phone-wrap" style={{ width: "100%", maxWidth: 280, margin: "0 auto", position: "relative" }}>
       <div style={{
         width: "100%", aspectRatio: "9/19.5",
         backgroundColor: "#111",
@@ -64,32 +67,60 @@ function Phone({ tint = "#1C1C1C", screenLabel }: { tint?: string; screenLabel?:
         border: "2px solid rgba(255,255,255,0.12)",
         boxShadow: "0 0 0 6px rgba(0,0,0,0.6), 0 32px 80px rgba(0,0,0,0.55)",
         overflow: "hidden",
+        position: "relative",
         display: "flex", flexDirection: "column" as const,
       }}>
-        <div style={{
-          width: "100%", height: "5%",
-          backgroundColor: "rgba(0,0,0,0.8)",
-          display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
-        }}>
-          <div style={{ width: 60, height: 6, backgroundColor: "#222", borderRadius: 3 }} />
-        </div>
-        <div style={{
-          flex: 1, backgroundColor: tint,
-          display: "flex", flexDirection: "column" as const,
-          alignItems: "center", justifyContent: "center",
-          gap: "0.5rem", padding: "1rem",
-        }}>
-          <span style={{ fontSize: "1.5rem", opacity: 0.15 }}>📱</span>
-          {screenLabel && (
-            <span style={{
-              fontSize: "0.55rem", fontWeight: 600, textAlign: "center" as const,
-              maxWidth: "80%", lineHeight: 1.5, letterSpacing: "0.06em",
-              color: tint === "#1C1C1C" ? "rgba(255,255,255,0.22)" : "rgba(0,0,0,0.22)",
+        {src ? (
+          <>
+            <Image
+              src={src}
+              alt={screenLabel ?? ""}
+              fill
+              style={{ objectFit: "cover", objectPosition: "top center" }}
+              sizes="280px"
+            />
+            {/* Dynamic Island — iPhone 15 Pro pill, ~32% wide, ~4.3% tall, 1.4% from top */}
+            <div aria-hidden style={{
+              position: "absolute",
+              top: "1.4%",
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: "32%",
+              height: "4.3%",
+              backgroundColor: "#000",
+              borderRadius: 999,
+              zIndex: 10,
+              pointerEvents: "none",
+            }} />
+          </>
+        ) : (
+          <>
+            <div style={{
+              width: "100%", height: "5%",
+              backgroundColor: "rgba(0,0,0,0.8)",
+              display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
             }}>
-              {screenLabel}
-            </span>
-          )}
-        </div>
+              <div style={{ width: 60, height: 6, backgroundColor: "#222", borderRadius: 3 }} />
+            </div>
+            <div style={{
+              flex: 1, backgroundColor: tint,
+              display: "flex", flexDirection: "column" as const,
+              alignItems: "center", justifyContent: "center",
+              gap: "0.5rem", padding: "1rem",
+            }}>
+              <span style={{ fontSize: "1.5rem", opacity: 0.15 }}>📱</span>
+              {screenLabel && (
+                <span style={{
+                  fontSize: "0.55rem", fontWeight: 600, textAlign: "center" as const,
+                  maxWidth: "80%", lineHeight: 1.5, letterSpacing: "0.06em",
+                  color: tint === "#1C1C1C" ? "rgba(255,255,255,0.22)" : "rgba(0,0,0,0.22)",
+                }}>
+                  {screenLabel}
+                </span>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
@@ -101,20 +132,30 @@ export default function PlateBookPage() {
     <div style={{ fontFamily: "var(--font-inter), sans-serif", backgroundColor: T.light, color: T.mid }}>
       <CursorTracker />
 
-      {/* Hover style for playbook grid cells */}
       <style>{`
+        /* ── Playbook feature cells ── */
         .pb-cell {
-          padding: 1.6rem 1.5rem;
-          background: ${T.light};
+          padding: 1.4rem 1.5rem;
+          background: rgba(255,255,255,0.04);
           transition: background 0.2s ease, transform 0.2s ease;
           cursor: default;
         }
         .pb-cell:hover {
-          background: #e6ecff;
+          background: rgba(255,255,255,0.09);
           transform: translateY(-2px);
         }
-        .pb-cell:hover .pb-cell-title {
-          color: ${T.amber};
+        .pb-cell:hover .pb-cell-title { color: ${T.limeViv}; }
+
+        /* ── Phone hover tilt ── */
+        .phone-wrap {
+          transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1),
+                      filter 0.45s ease;
+          will-change: transform;
+        }
+        .phone-wrap:hover {
+          transform: perspective(900px) rotateY(-5deg) rotateX(2deg)
+                     translateY(-12px) scale(1.04);
+          filter: drop-shadow(0 28px 48px rgba(0,0,0,0.45));
         }
       `}</style>
 
@@ -214,7 +255,7 @@ export default function PlateBookPage() {
 
           {/* Right — phone */}
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <Phone screenLabel="Home screen: calories & protein donut charts" tint="#1C1C1C" />
+            <Phone src="/pb-home.png" screenLabel="Home screen: calories & protein donut charts" tint="#1C1C1C" />
           </div>
         </div>
 
@@ -328,10 +369,18 @@ export default function PlateBookPage() {
                   </div>
                 ))}
               </div>
+
+              {/* Interactive swipe demo */}
+              <div>
+                <p style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.3)", marginBottom: "0.75rem" }}>
+                  Try it
+                </p>
+                <SwipeDemo />
+              </div>
             </div>
           </AnimateIn>
           <AnimateIn delay={0.15}>
-            <Phone screenLabel="Home: donut charts, today's meal log" tint="#1C1C1C" />
+            <Phone src="/pb-home.png" screenLabel="Home: donut charts, today's meal log" tint="#1C1C1C" />
           </AnimateIn>
         </div>
       </section>
@@ -345,7 +394,7 @@ export default function PlateBookPage() {
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(2.5rem, 5vw, 6rem)", alignItems: "center" }}>
           <AnimateIn delay={0.05}>
-            <Phone screenLabel="Suggestions: meal picks with reasoning" tint="#f9f9f9" />
+            <Phone src="/pb-suggestions.png" screenLabel="Suggestions: meal picks with reasoning" tint="#f9f9f9" />
           </AnimateIn>
           <AnimateIn delay={0.15}>
             <div style={{ display: "flex", flexDirection: "column" as const, gap: "clamp(1.5rem, 3vw, 2.5rem)" }}>
@@ -387,22 +436,22 @@ export default function PlateBookPage() {
       </section>
 
       {/* ── FEATURE 3: PLAYBOOK ─────────────────────────────────── */}
-      <section style={{ backgroundColor: "#f8fafc", borderTop: T.divider, borderBottom: T.divider, paddingTop: T.padY, paddingBottom: T.padY, paddingLeft: T.padX, paddingRight: T.padX }}>
+      <section style={{ backgroundColor: T.ink, paddingTop: T.padY, paddingBottom: T.padY, paddingLeft: T.padX, paddingRight: T.padX }}>
         <AnimateIn>
-          <Label>03 · Playbook</Label>
-          <H2>Your Meal Library</H2>
+          <Label light>03 · Playbook</Label>
+          <H2 dark>Your Meal Library</H2>
         </AnimateIn>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(2.5rem, 5vw, 6rem)", alignItems: "center" }}>
           <AnimateIn delay={0.05}>
             <div style={{ display: "flex", flexDirection: "column" as const, gap: "clamp(1.5rem, 3vw, 2.5rem)" }}>
-              <p style={{ fontFamily: T.serif, fontStyle: "italic", fontSize: "clamp(1.1rem, 1.6vw, 1.4rem)", color: T.mid, lineHeight: 1.45 }}>
+              <p style={{ fontFamily: T.serif, fontStyle: "italic", fontSize: "clamp(1.1rem, 1.6vw, 1.4rem)", color: "rgba(255,255,255,0.75)", lineHeight: 1.45 }}>
                 Save once.<br />Log forever.
               </p>
-              <p style={{ fontSize: "clamp(0.9rem, 1.05vw, 1rem)", color: T.muted, lineHeight: 1.85 }}>
+              <p style={{ fontSize: "clamp(0.9rem, 1.05vw, 1rem)", color: "rgba(255,255,255,0.48)", lineHeight: 1.85 }}>
                 Add a meal with a name, calories, protein, and optional notes. After that it's a single tap (with a serving scale modal if the portion changes).
               </p>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", backgroundColor: "rgba(13,27,62,0.07)" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", backgroundColor: "rgba(255,255,255,0.06)" }}>
                 {[
                   { title: "5 Sort Modes", body: "Newest · Oldest · Most Used · A→Z · P/C Ratio" },
                   { title: "Smart Search", body: "Searches meal name and individual ingredients" },
@@ -412,8 +461,8 @@ export default function PlateBookPage() {
                   { title: "Swipe to Delete", body: "Swipe left to remove. No confirmation needed." },
                 ].map(({ title, body }) => (
                   <div key={title} className="pb-cell">
-                    <p className="pb-cell-title" style={{ fontSize: "0.82rem", fontWeight: 700, color: T.mid, marginBottom: "0.4rem", transition: "color 0.2s ease" }}>{title}</p>
-                    <p style={{ fontSize: "0.8rem", color: T.muted, lineHeight: 1.6 }}>{body}</p>
+                    <p className="pb-cell-title" style={{ fontSize: "0.82rem", fontWeight: 700, color: "rgba(255,255,255,0.8)", marginBottom: "0.4rem", transition: "color 0.2s ease" }}>{title}</p>
+                    <p style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.38)", lineHeight: 1.6 }}>{body}</p>
                   </div>
                 ))}
               </div>
@@ -421,9 +470,9 @@ export default function PlateBookPage() {
           </AnimateIn>
           <AnimateIn delay={0.15}>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem", alignItems: "start" }}>
-              <Phone screenLabel="Playbook: meal cards with macro pills, P/C ratio" tint="#f9f9f9" />
+              <Phone src="/pb-playbook.png" screenLabel="Playbook: meal cards with macro pills, P/C ratio" tint="#f9f9f9" />
               <div style={{ marginTop: "3rem" }}>
-                <Phone screenLabel="Serving modal: input + live macro preview" tint="#ffffff" />
+                <ServingDemo />
               </div>
             </div>
           </AnimateIn>
@@ -431,22 +480,22 @@ export default function PlateBookPage() {
       </section>
 
       {/* ── FEATURE 4: ANALYTICS ─────────────────────────────────── */}
-      <section style={{ backgroundColor: T.ink, paddingTop: T.padY, paddingBottom: T.padY, paddingLeft: T.padX, paddingRight: T.padX }}>
+      <section style={{ backgroundColor: T.light, paddingTop: T.padY, paddingBottom: T.padY, paddingLeft: T.padX, paddingRight: T.padX }}>
         <AnimateIn>
-          <Label light>04 · Analytics</Label>
-          <H2 dark>Patterns Over Perfection</H2>
+          <Label>04 · Analytics</Label>
+          <H2>Patterns Over Perfection</H2>
         </AnimateIn>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(2.5rem, 5vw, 6rem)", alignItems: "center" }}>
           <AnimateIn delay={0.05}>
-            <Phone screenLabel="Analytics: monthly calendar, streak, trend charts" tint="#1C1C1C" />
+            <Phone src="/pb-analytics.png" screenLabel="Analytics: monthly calendar, streak, trend charts" tint="#1C1C1C" />
           </AnimateIn>
           <AnimateIn delay={0.15}>
             <div style={{ display: "flex", flexDirection: "column" as const, gap: "clamp(1.1rem, 2.2vw, 2rem)" }}>
-              <p style={{ fontFamily: T.serif, fontStyle: "italic", fontSize: "clamp(1.1rem, 1.6vw, 1.4rem)", color: "rgba(255,255,255,0.75)", lineHeight: 1.45 }}>
+              <p style={{ fontFamily: T.serif, fontStyle: "italic", fontSize: "clamp(1.1rem, 1.6vw, 1.4rem)", color: T.mid, lineHeight: 1.45 }}>
                 Consistency is the metric<br />that actually matters.
               </p>
-              <p style={{ fontSize: "clamp(0.9rem, 1.05vw, 1rem)", color: "rgba(255,255,255,0.48)", lineHeight: 1.85 }}>
+              <p style={{ fontSize: "clamp(0.9rem, 1.05vw, 1rem)", color: T.muted, lineHeight: 1.85 }}>
                 A monthly calendar marks days where you hit both goals. The pattern of green cells tells you more than a daily calorie count ever could.
               </p>
               <div style={{ display: "flex", flexDirection: "column" as const, gap: "1rem" }}>
@@ -456,9 +505,9 @@ export default function PlateBookPage() {
                   { title: "Monthly trend lines", body: "Calories and protein charted over time. Navigate back to any month." },
                   { title: "Targets set by science", body: "Goals are calculated using Mifflin-St Jeor BMR with activity multipliers. Protein targets scale from 1.4 g/kg (maintain) to 2.2 g/kg (recomp), based on published research." },
                 ].map(({ title, body }) => (
-                  <div key={title} style={{ borderLeft: `2px solid rgba(232,160,32,0.3)`, paddingLeft: "1.25rem" }}>
-                    <p style={{ fontSize: "0.8rem", fontWeight: 700, color: "rgba(255,255,255,0.65)", marginBottom: "0.25rem" }}>{title}</p>
-                    <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.35)", lineHeight: 1.65 }}>{body}</p>
+                  <div key={title} style={{ borderLeft: `3px solid ${T.amber}`, paddingLeft: "1.25rem" }}>
+                    <p style={{ fontSize: "0.8rem", fontWeight: 700, color: T.mid, marginBottom: "0.25rem" }}>{title}</p>
+                    <p style={{ fontSize: "0.82rem", color: T.muted, lineHeight: 1.65 }}>{body}</p>
                   </div>
                 ))}
               </div>
@@ -469,15 +518,14 @@ export default function PlateBookPage() {
 
       {/* ── DESIGN SYSTEM ───────────────────────────────────────── */}
       <section style={{
-        backgroundColor: T.mid,
-        backgroundImage: T.dots,
-        backgroundSize: T.dotSize,
+        backgroundColor: "#fff",
         paddingTop: T.padY, paddingBottom: T.padY,
         paddingLeft: T.padX, paddingRight: T.padX,
+        borderTop: T.divider,
       }}>
         <AnimateIn>
-          <Label light>Design System</Label>
-          <H2 dark>Visual Language</H2>
+          <Label>Design System</Label>
+          <H2>Visual Language</H2>
         </AnimateIn>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(3rem, 6vw, 6rem)" }}>
@@ -494,10 +542,10 @@ export default function PlateBookPage() {
                 { swatch: "#FF5C5C", name: "Red", role: "Over-limit warnings" },
               ].map(({ swatch, name, role }) => (
                 <div key={name} style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                  <div style={{ width: 36, height: 36, borderRadius: 6, backgroundColor: swatch, flexShrink: 0 }} />
+                  <div style={{ width: 36, height: 36, borderRadius: 6, backgroundColor: swatch, flexShrink: 0, border: "1px solid rgba(13,27,62,0.08)" }} />
                   <div>
-                    <p style={{ fontSize: "0.8rem", fontWeight: 700, color: "#fff", marginBottom: "0.1rem" }}>{name}</p>
-                    <p style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.4)", lineHeight: 1.5 }}>{role}</p>
+                    <p style={{ fontSize: "0.8rem", fontWeight: 700, color: T.mid, marginBottom: "0.1rem" }}>{name}</p>
+                    <p style={{ fontSize: "0.72rem", color: T.muted, lineHeight: 1.5 }}>{role}</p>
                   </div>
                 </div>
               ))}
@@ -509,16 +557,16 @@ export default function PlateBookPage() {
             <p style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase" as const, color: T.amber, marginBottom: "1.5rem" }}>Typography</p>
             <div style={{ display: "flex", flexDirection: "column" as const, gap: "2rem" }}>
               <div style={{ borderLeft: `3px solid ${T.amber}`, paddingLeft: "1.5rem" }}>
-                <p style={{ fontSize: "clamp(1.6rem, 2.5vw, 2.2rem)", color: "#fff", fontWeight: 700, letterSpacing: "2px", marginBottom: "0.3rem", lineHeight: 1 }}>MILKER</p>
-                <p style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.4)" }}>Display · hero numbers · page titles</p>
+                <p style={{ fontSize: "clamp(1.6rem, 2.5vw, 2.2rem)", color: T.mid, fontWeight: 700, letterSpacing: "2px", marginBottom: "0.3rem", lineHeight: 1 }}>MILKER</p>
+                <p style={{ fontSize: "0.72rem", color: T.muted }}>Display · hero numbers · page titles</p>
               </div>
-              <div style={{ borderLeft: `3px solid rgba(255,255,255,0.2)`, paddingLeft: "1.5rem" }}>
-                <p style={{ fontSize: "clamp(1rem, 1.4vw, 1.25rem)", color: "#fff", fontWeight: 700, letterSpacing: "0.3px", marginBottom: "0.3rem", lineHeight: 1 }}>ZT Nature Bold</p>
-                <p style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.4)" }}>Section headers · button labels · card names</p>
+              <div style={{ borderLeft: `3px solid rgba(13,27,62,0.15)`, paddingLeft: "1.5rem" }}>
+                <p style={{ fontSize: "clamp(1rem, 1.4vw, 1.25rem)", color: T.mid, fontWeight: 700, letterSpacing: "0.3px", marginBottom: "0.3rem", lineHeight: 1 }}>ZT Nature Bold</p>
+                <p style={{ fontSize: "0.72rem", color: T.muted }}>Section headers · button labels · card names</p>
               </div>
-              <div style={{ borderLeft: `3px solid rgba(255,255,255,0.1)`, paddingLeft: "1.5rem" }}>
-                <p style={{ fontSize: "clamp(0.9rem, 1.2vw, 1rem)", color: "rgba(255,255,255,0.6)", marginBottom: "0.3rem", lineHeight: 1 }}>ZT Nature Regular</p>
-                <p style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.4)" }}>Body text · notes · supporting copy</p>
+              <div style={{ borderLeft: `3px solid rgba(13,27,62,0.07)`, paddingLeft: "1.5rem" }}>
+                <p style={{ fontSize: "clamp(0.9rem, 1.2vw, 1rem)", color: T.muted, marginBottom: "0.3rem", lineHeight: 1 }}>ZT Nature Regular</p>
+                <p style={{ fontSize: "0.72rem", color: T.muted, opacity: 0.65 }}>Body text · notes · supporting copy</p>
               </div>
             </div>
           </AnimateIn>
@@ -526,14 +574,14 @@ export default function PlateBookPage() {
       </section>
 
       {/* ── WHAT'S NEXT ─────────────────────────────────────────── */}
-      <section style={{ paddingTop: "clamp(2.5rem, 5vw, 5rem)", paddingBottom: "clamp(2.5rem, 5vw, 5rem)", paddingLeft: T.padX, paddingRight: T.padX }}>
+      <section style={{ backgroundColor: T.ink, paddingTop: "clamp(3rem, 6vw, 6rem)", paddingBottom: "clamp(3rem, 6vw, 6rem)", paddingLeft: T.padX, paddingRight: T.padX }}>
         <div style={{ maxWidth: 720 }}>
           <AnimateIn>
-            <Label>What's Next</Label>
-            <H2>Meal packs: shareable playbook templates</H2>
+            <Label light>What's Next</Label>
+            <H2 dark>Meal packs: shareable playbook templates</H2>
           </AnimateIn>
           <AnimateIn delay={0.1}>
-            <p style={{ fontSize: "clamp(0.95rem, 1.1vw, 1.05rem)", color: T.muted, lineHeight: 1.9 }}>
+            <p style={{ fontSize: "clamp(0.95rem, 1.1vw, 1.05rem)", color: "rgba(255,255,255,0.5)", lineHeight: 1.9 }}>
               The playbook format maps naturally to sharing. A "meal pack" (a curated set of playbook entries for a specific goal) could export as a file and import in one tap. It would solve the cold-start problem and let people share what's working, without needing a backend.
             </p>
           </AnimateIn>
@@ -541,7 +589,7 @@ export default function PlateBookPage() {
       </section>
 
       {/* ── GLOOK ───────────────────────────────────────────────── */}
-      <section style={{ borderTop: T.divider, paddingTop: "clamp(2.5rem, 4.5vw, 4.5rem)", paddingBottom: "clamp(2.5rem, 4.5vw, 4.5rem)", paddingLeft: T.padX, paddingRight: T.padX }}>
+      <section style={{ backgroundColor: T.light, paddingTop: "clamp(2.5rem, 4.5vw, 4.5rem)", paddingBottom: "clamp(2.5rem, 4.5vw, 4.5rem)", paddingLeft: T.padX, paddingRight: T.padX }}>
         <AnimateIn>
           <Label>Related Project</Label>
           <div style={{
