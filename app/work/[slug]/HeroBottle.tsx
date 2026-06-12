@@ -51,10 +51,17 @@ export function HeroBottle() {
             drop-shadow(0 0 140px rgba(232,160,32,0.30))
             drop-shadow(0 0 300px rgba(110,80,220,0.18));
         }
+        /* Narrow screens: the text column spans the full width, so push the
+           bottle toward the edge and dim it to a backdrop */
+        @media (max-width: 880px) {
+          .hero-bottle-wrap { width: 78% !important; right: -32% !important; }
+          .hero-bottle-img  { opacity: 0.45; }
+        }
       `}</style>
 
       <div
         ref={containerRef}
+        className="hero-bottle-wrap"
         aria-hidden
         style={{
           position: "absolute",
@@ -74,7 +81,7 @@ export function HeroBottle() {
         }}
       >
         <Image
-          src="/dualite-bottle-transparent.png"
+          src="/dualite-bottle-transparent.avif"
           alt=""
           fill
           sizes="50vw"

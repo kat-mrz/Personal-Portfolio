@@ -39,3 +39,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# raw source material (fonts trials, original exports) — not served by the site
+/dualite-media/
+/et-emilia-grace-demo/
+/hero media/
+/instrument-serif/
+/minya-demo/
+/platebook media/
+/raphen-madam-demo/
+/ruigslay/
+/this site media/
+/zaslia/

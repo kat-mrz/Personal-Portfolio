@@ -119,8 +119,8 @@ export default function GraynePage() {
               maxWidth: 560,
               marginBottom: "clamp(2.5rem, 5vw, 4.5rem)",
             }}>
-              A journaling app that tracks how you feel about the people and things
-              in your life — without telling you how to write.
+              A journaling app that keeps track of how you feel about the people and things
+              in your life. Reflection simplified.
             </p>
           </AnimateIn>
 
@@ -173,9 +173,8 @@ export default function GraynePage() {
             color: T.muted, lineHeight: 1.75,
             maxWidth: 640,
           }}>
-            Most journaling apps want you to answer prompts. Grayne just wants you to write.
-            As you do, it quietly tracks sentiment — not just positive or negative,
-            but who and what those feelings are attached to.
+            I identified two problems I have with journaling. One: I get so caught up in formatting and grammar checking my entries that I never just dump my feelings out. Two: I rarely revisit old entries and forget about important moments. Which is why I'm developing Grayne.
+            The user will jot down their entry through bullet points, while Grayne analyzes the sentiment of the statement, grading the sentiment of the day. Grayne will also track the sentiment attached to each person, place, or thing mentioned for analytics-supported reflection.
           </p>
         </AnimateIn>
       </section>
@@ -208,11 +207,11 @@ export default function GraynePage() {
               },
               {
                 title: "Sentiment Calendar",
-                body: "A month view shaded green to red by day. Spot patterns without having to re-read a word.",
+                body: "A month view shaded green to red by day. Spot patterns in your life without having to re-read a word.",
               },
               {
                 title: "Ask Gray",
-                body: "An AI chat with full journal context. Ask it anything — Gray has actually read your entries.",
+                body: "An AI chat with full journal context. Ask Grayne's mascot anything. Gray can give you answers informed by your experiences.",
               },
             ].map(({ title, body }) => (
               <div key={title} style={{
@@ -294,7 +293,7 @@ export default function GraynePage() {
         display: "flex", justifyContent: "space-between", alignItems: "center",
         flexWrap: "wrap", gap: "1rem",
       }}>
-        <Link href="/work/project-2" style={{
+        <Link href="/work/platebook" style={{
           color: "rgba(255,255,255,0.45)", textDecoration: "none",
           fontSize: "0.82rem", letterSpacing: "0.08em", transition: "color 0.2s",
         }}>

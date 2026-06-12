@@ -6,12 +6,12 @@ const AMBER = "#e8a020";
 
 const SLIDES = [
   {
-    src:     "/dualite-signature-accord.png",
-    caption: "Shared Signature Accord — the olfactory thread tying both formulas together",
+    src:     "/dualite-signature-accord.avif",
+    caption: "Shared Signature Accord: the olfactory thread tying both formulas together",
   },
   {
-    src:     "/dualite-core-product-line.png",
-    caption: "Light Formula ↔ Dark Formula — same bottle, different mood",
+    src:     "/dualite-core-product-line.avif",
+    caption: "Light Formula ↔ Dark Formula: same bottle, different mood",
   },
 ];
 

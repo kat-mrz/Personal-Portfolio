@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Instrument_Serif, Instrument_Sans, Manrope } from "next/font/google";
+import { Instrument_Serif, Manrope, Lexend_Giga } from "next/font/google";
 import "./globals.css";
 
 /* Ruigslay — "Portfolio" display text only */
@@ -12,7 +12,7 @@ const display = localFont({
 
 /* Milker — PlateBook brand display font */
 const milker = localFont({
-  src: [{ path: "../public/Milker.otf", weight: "400", style: "normal" }],
+  src: [{ path: "./fonts/Milker.otf", weight: "400", style: "normal" }],
   variable: "--font-milker",
   adjustFontFallback: false,
 });
@@ -25,12 +25,11 @@ const playfair = Instrument_Serif({
   style: ["normal", "italic"],
 });
 
-/* Instrument Sans — UI text / bio copy */
-const instrumentSans = Instrument_Sans({
-  variable: "--font-instrument-sans",
+/* Lexend Giga — Grayne brand display font */
+const lexendGiga = Lexend_Giga({
+  variable: "--font-lexend-giga",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
+  weight: ["400"],
 });
 
 /* Manrope — body copy */
@@ -50,7 +49,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${display.variable} ${playfair.variable} ${instrumentSans.variable} ${inter.variable} ${milker.variable}`}>
+    <html lang="en" className={`${display.variable} ${playfair.variable} ${inter.variable} ${milker.variable} ${lexendGiga.variable}`}>
       <body className="antialiased">{children}</body>
     </html>
   );

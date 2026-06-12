@@ -71,6 +71,12 @@ body::before {
   60%       { opacity: 0.42; transform: scale(0.68); }
 }
 
+/* Gentler shimmer — stays visible the whole cycle, for decorative accents */
+@keyframes twinkleSoft {
+  0%, 100% { opacity: 1;    transform: scale(1); }
+  50%       { opacity: 0.55; transform: scale(0.86); }
+}
+
 /* Mason-jar interior glow */
 @keyframes firefly-in-jar {
   0%, 100% { opacity: 0.85; }

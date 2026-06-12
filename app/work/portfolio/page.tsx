@@ -2,8 +2,13 @@ import Link from "next/link";
 import { CursorTracker } from "../[slug]/CursorTracker";
 import { AnimateIn } from "../[slug]/AnimateIn";
 import { HeroTextParallax } from "../[slug]/HeroTextParallax";
+import {
+  EggHud, MoonPhases, WishStar, PerfumeBottle, WalkingCat, TeaCup,
+  CameraSnap, CatConstellation, VinylDisc, EggCarton, Saturn,
+  BigDipper, LittleDipper, CassiopeiaConst, OrionConst, LepusConst,
+} from "./Eggs";
 
-/* ─── Design tokens (shared with other case studies) ─── */
+/* ─── Design tokens ─── */
 const T = {
   serif:   "var(--font-playfair), Georgia, serif",
   mid:     "#0d1b3e",
@@ -18,7 +23,6 @@ const T = {
   marble:  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.008 0.003' numOctaves='5' seed='5' result='t'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.55 0 0 0 0 0.57 0 0 0 0 0.65 0 0 0 0.09 0' in='t'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E\")" as const,
   dots:    "radial-gradient(ellipse 65% 55% at var(--cx, 78%) var(--cy, 18%), rgba(75,55,185,0.18) 0%, transparent 55%), radial-gradient(circle, rgba(255,255,255,0.048) 1px, transparent 1px)" as const,
   dotSize: "auto, 9px 9px" as const,
-  /* The homepage aurora gradient — inlined so this section echoes the hero */
   aurora:  "linear-gradient(120deg, #07101f 0%, #0b1836 20%, #0f2244 38%, #0d1b3e 52%, #091530 66%, #0e1e42 80%, #07101f 100%)" as const,
 };
 
@@ -55,7 +59,6 @@ function H2({ children, dark = false }: { children: React.ReactNode; dark?: bool
   );
 }
 
-/* Small floating glow dots — purely decorative, echo the firefly motif */
 function FireflyDots() {
   const dots = [
     { left: "12%",  top: "22%", size: 3,   opacity: 0.7  },
@@ -84,8 +87,6 @@ function FireflyDots() {
   );
 }
 
-/* Inline keyframes — ff-blink is defined in globals.css, but we add a slower
-   version here so the hero dots breathe at a more ambient pace */
 const HERO_STYLES = `
   @keyframes ff-blink-slow {
     0%, 100% { opacity: 0.55; }
@@ -98,6 +99,7 @@ export default function PortfolioPage() {
     <div style={{ fontFamily: "var(--font-inter), sans-serif", backgroundColor: T.light, color: T.mid }}>
       <style dangerouslySetInnerHTML={{ __html: HERO_STYLES }} />
       <CursorTracker />
+      <EggHud />
 
       {/* ── Nav ── */}
       <header style={{
@@ -120,8 +122,6 @@ export default function PortfolioPage() {
 
       {/* ════════════════════════════════════════════════
           SECTION 1 — HERO  (aurora night sky)
-          Uses the same gradient as the homepage hero so
-          this page feels like stepping back into the source.
       ════════════════════════════════════════════════ */}
       <section style={{
         background: T.aurora,
@@ -130,12 +130,19 @@ export default function PortfolioPage() {
         display: "flex", alignItems: "center",
         position: "relative", overflow: "hidden",
       }}>
-        {/* Ambient firefly dots — subtle, not interactive */}
         <FireflyDots />
+
+        {/* Night sky objects — all absolutely positioned */}
+        <MoonPhases />
+        <WishStar />
+        {/* Big & Little Dipper flank the left side of the sky */}
+        <BigDipper />
+        <LittleDipper />
+        {/* Vinyl record — bottom right where the perfume used to live */}
+        <VinylDisc />
 
         <div style={{ maxWidth: 780, width: "100%", position: "relative", zIndex: 1 }}>
           <HeroTextParallax rate={0.10}>
-            {/* Badge */}
             <div style={{
               display: "inline-block",
               border: `1px solid ${T.amber}`,
@@ -148,7 +155,6 @@ export default function PortfolioPage() {
               ✦ Easter Eggs Inside
             </div>
 
-            {/* Title */}
             <h1 style={{
               fontFamily: T.serif,
               fontSize: "clamp(3.8rem, 10vw, 9rem)",
@@ -160,7 +166,6 @@ export default function PortfolioPage() {
               This Portfolio
             </h1>
 
-            {/* Tagline */}
             <AnimateIn delay={0.1}>
               <p style={{
                 fontSize: "clamp(1rem, 1.6vw, 1.2rem)",
@@ -173,7 +178,6 @@ export default function PortfolioPage() {
               </p>
             </AnimateIn>
 
-            {/* Meta strip */}
             <AnimateIn delay={0.2}>
               <div style={{
                 display: "grid",
@@ -204,218 +208,180 @@ export default function PortfolioPage() {
       </section>
 
       {/* ════════════════════════════════════════════════
-          SECTION 2 — THE FEELING  (light + marble)
-          The fireflies, the wonder, the easter egg spirit.
+          INTERSTITIAL — soft prompt
+      ════════════════════════════════════════════════ */}
+      <section style={{
+        background: "linear-gradient(180deg, #07101f 0%, #0c1630 100%)",
+        padding: `clamp(2rem, 4vw, 3.5rem) ${T.padX}`,
+        borderBottom: "1px solid rgba(255,255,255,0.05)",
+        textAlign: "center",
+      }}>
+        <p style={{
+          fontFamily: T.serif,
+          fontStyle: "italic",
+          fontSize: "clamp(0.95rem, 1.4vw, 1.1rem)",
+          color: "rgba(255,255,255,0.48)",
+          margin: "0 auto",
+          maxWidth: 560,
+        }}>
+          Before we start: have you tried clicking on the{" "}
+          <Link href="/" style={{ color: T.amber, textDecoration: "none", borderBottom: `1px solid ${T.amber}` }}>
+            jar
+          </Link>
+          {" "}at the top of my main page?
+        </p>
+      </section>
+
+      {/* ════════════════════════════════════════════════
+          SECTION 2 — THE KID  (light + marble)
       ════════════════════════════════════════════════ */}
       <section style={{
         background: T.light,
         backgroundImage: T.marble,
         padding: `${T.padY} ${T.padX}`,
+        position: "relative",
+        textAlign: "center",
       }}>
-        <AnimateIn>
-          <Label>The Feeling</Label>
-          <H2>Built for the Moment of Discovery</H2>
-        </AnimateIn>
+        {/* Camera (hint shots) — left margin on wide screens */}
+        <CameraSnap />
+        {/* Tea — right margin on wide screens */}
+        <TeaCup />
+        {/* Cat walks along the bottom */}
+        <WalkingCat />
 
-        <AnimateIn delay={0.1}>
+        <AnimateIn>
+          <Label>Where It Starts</Label>
           <p style={{
-            fontSize: "clamp(1rem, 1.5vw, 1.15rem)",
-            color: T.muted, lineHeight: 1.8,
-            maxWidth: 660,
-            marginBottom: "clamp(1.5rem, 3vw, 2.5rem)",
+            fontFamily: T.serif,
+            fontSize: "clamp(1.6rem, 3.5vw, 3rem)",
+            fontWeight: 400,
+            color: T.mid,
+            lineHeight: 1.15,
+            letterSpacing: "-0.01em",
+            maxWidth: 760,
+            margin: "0 auto clamp(2rem, 4vw, 3.5rem)",
           }}>
-            The fireflies weren&apos;t an afterthought. They were the starting point.
-            I wanted this portfolio to have something you don&apos;t expect to find — the kind
-            of moment you get when you discover a hidden room in a video game, or stumble
-            onto an easter egg in an app you&apos;ve used a hundred times.
+            I&apos;ve always loved exploratory experiences.
           </p>
         </AnimateIn>
 
-        <AnimateIn delay={0.15}>
+        <AnimateIn delay={0.08}>
           <p style={{
-            fontSize: "clamp(1rem, 1.5vw, 1.15rem)",
-            color: T.muted, lineHeight: 1.8,
-            maxWidth: 660,
-            marginBottom: "clamp(1.5rem, 3vw, 2.5rem)",
+            fontSize: "clamp(1rem, 1.5vw, 1.12rem)",
+            color: T.muted, lineHeight: 1.85,
+            maxWidth: 620,
+            margin: "0 auto clamp(1.5rem, 3vw, 2.5rem)",
           }}>
-            That feeling of exploration — of a product that rewards curiosity — is something
-            I chase as a designer. Interactivity shouldn&apos;t only serve function.
-            Sometimes it should just make you smile.
+            One of my fondest childhood memories is getting a summer pass to Science World
+            and spending every week roaming the exhibits — poking, prodding, and experimenting
+            with every button, lever, and sensory object I could find.
+          </p>
+        </AnimateIn>
+
+        <AnimateIn delay={0.14}>
+          <p style={{
+            fontSize: "clamp(1rem, 1.5vw, 1.12rem)",
+            color: T.muted, lineHeight: 1.85,
+            maxWidth: 620,
+            margin: "0 auto clamp(2rem, 4vw, 3.5rem)",
+          }}>
+            Now I&apos;m in university. I&apos;ve learned to channel my curiosity into solving
+            business problems — to{" "}
+            <em style={{ color: T.mid, fontStyle: "italic" }}>&ldquo;align shareholder value,&rdquo;</em>
+            {" "}<em style={{ color: T.mid, fontStyle: "italic" }}>&ldquo;circle back,&rdquo;</em>
+            {" "}and{" "}
+            <em style={{ color: T.mid, fontStyle: "italic" }}>&ldquo;take it offline.&rdquo;</em>
           </p>
         </AnimateIn>
 
         <AnimateIn delay={0.2}>
-          <p style={{
-            fontSize: "clamp(1rem, 1.5vw, 1.15rem)",
-            color: T.muted, lineHeight: 1.8,
-            maxWidth: 660,
+          <blockquote style={{
+            borderTop: `1px solid ${T.amber}`,
+            paddingTop: "clamp(1.25rem, 2.5vw, 2rem)",
+            margin: "0 auto",
+            maxWidth: 620,
           }}>
-            This is just the beginning. I&apos;ll keep adding quiet little moments over time.
-            If you&apos;re curious enough to click on something unexpected — you might just find one.
-          </p>
+            <p style={{
+              fontFamily: T.serif,
+              fontSize: "clamp(1.2rem, 2.4vw, 2rem)",
+              fontWeight: 400,
+              color: T.mid,
+              lineHeight: 1.3,
+              fontStyle: "italic",
+              margin: 0,
+            }}>
+              But deep down, I&apos;m still that kid at Science World — playing with
+              anything that looks interactive, just to see what happens.
+            </p>
+          </blockquote>
         </AnimateIn>
       </section>
 
       {/* ════════════════════════════════════════════════
-          SECTION 3 — THE CRAFT  (dark + dots)
-          Techniques: scaffolded animation, parallax, texture.
+          SECTION 3 — THE EASTER EGGS  (dark + dots)
       ════════════════════════════════════════════════ */}
       <section style={{
         background: T.ink,
         backgroundImage: T.dots,
         backgroundSize: T.dotSize,
         padding: `${T.padY} ${T.padX}`,
+        position: "relative",
+        textAlign: "center",
       }}>
+        {/* Constellations — left and right margins */}
+        <CatConstellation />      {/* left top */}
+        <CassiopeiaConst />       {/* right top */}
+        <Saturn />                {/* left mid */}
+        <OrionConst />            {/* left lower */}
+        <LepusConst />            {/* right lower */}
+        {/* Perfume — right bottom (where vinyl used to be) */}
+        <PerfumeBottle />
+
         <AnimateIn>
-          <Label light>The Craft</Label>
-          <H2 dark>What I Was Reaching For</H2>
+          <Label light>The Easter Eggs</Label>
+          <H2 dark>Joy of Exploration, By Design</H2>
         </AnimateIn>
 
-        <AnimateIn delay={0.05}>
+        <AnimateIn delay={0.08}>
           <p style={{
-            fontSize: "clamp(0.95rem, 1.4vw, 1.1rem)",
-            color: "rgba(255,255,255,0.55)", lineHeight: 1.75,
+            fontSize: "clamp(1rem, 1.5vw, 1.1rem)",
+            color: "rgba(255,255,255,0.6)", lineHeight: 1.85,
             maxWidth: 620,
-            marginBottom: "clamp(2rem, 4vw, 3.5rem)",
+            margin: "0 auto clamp(1.5rem, 3vw, 2.5rem)",
           }}>
-            I spent a lot of time studying what separates a portfolio that feels like a PDF
-            export from one that feels like a place. The techniques below are the ones I kept
-            coming back to.
+            My goal is to bring that same joy of exploration into my work — starting
+            with this portfolio. I&apos;ve hidden interactive easter eggs throughout the
+            site, inspired by some of my favourite video games.
           </p>
         </AnimateIn>
 
-        <AnimateIn delay={0.1}>
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))",
-            gap: "clamp(1rem, 2vw, 1.5rem)",
-          }}>
-            {[
-              {
-                title: "Scaffolded Animation",
-                body: "Motion that enters in layers — headline first, tagline next, metadata last. Each beat gives the eye somewhere to land before the next thing arrives.",
-              },
-              {
-                title: "Parallax Depth",
-                body: "Stars in the hero scroll at different speeds based on their depth value. The feeling of distance is subtle, but it makes the space feel genuinely three-dimensional.",
-              },
-              {
-                title: "Texture Everywhere",
-                body: "A grain overlay sits at 12% opacity over the entire page. Marble noise underneath light sections. The surface should feel like something, not just look like it.",
-              },
-              {
-                title: "Layout as Flow",
-                body: "Alternating dark and light sections create a rhythm that pulls you forward. The eye gets contrast and rest in equal measure — no single section fights for attention.",
-              },
-            ].map(({ title, body }) => (
-              <div key={title} style={{
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                borderRadius: "4px",
-                padding: "clamp(1.5rem, 3vw, 2.2rem)",
-              }}>
-                <p style={{
-                  fontFamily: T.serif, fontSize: "1.05rem",
-                  color: "#fff", marginBottom: "0.75rem",
-                  letterSpacing: "0.02em",
-                }}>
-                  {title}
-                </p>
-                <p style={{
-                  fontSize: "0.9rem", color: "rgba(255,255,255,0.5)",
-                  lineHeight: 1.65,
-                }}>
-                  {body}
-                </p>
-              </div>
-            ))}
-          </div>
-        </AnimateIn>
-      </section>
-
-      {/* ════════════════════════════════════════════════
-          SECTION 4 — UNDER THE HOOD  (light + marble)
-          Tech stack, honest build notes.
-      ════════════════════════════════════════════════ */}
-      <section style={{
-        background: T.light,
-        backgroundImage: T.marble,
-        padding: `${T.padY} ${T.padX}`,
-      }}>
-        <AnimateIn>
-          <Label>Under the Hood</Label>
-          <H2>How It&apos;s Built</H2>
-        </AnimateIn>
-
-        <AnimateIn delay={0.1}>
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-            gap: "clamp(1rem, 2vw, 1.5rem)",
-            marginBottom: "clamp(2.5rem, 5vw, 4rem)",
-          }}>
-            {[
-              {
-                label: "Framework",
-                value: "Next.js 16",
-                note: "App Router, server components, static export",
-              },
-              {
-                label: "Language",
-                value: "TypeScript",
-                note: "Strict mode throughout",
-              },
-              {
-                label: "Styles",
-                value: "Tailwind CSS v4",
-                note: "Utility-first with custom design tokens",
-              },
-              {
-                label: "Firefly System",
-                value: "Pure CSS + minimal RAF",
-                note: "60 unique @keyframes sets. Cursor repulsion via transform, not left/top",
-              },
-            ].map(({ label, value, note }) => (
-              <div key={label} style={{
-                borderTop: `2px solid ${T.amber}`,
-                paddingTop: "1.1rem",
-              }}>
-                <p style={{
-                  fontSize: "0.68rem", letterSpacing: "0.15em",
-                  textTransform: "uppercase", color: T.amber,
-                  marginBottom: "0.4rem", fontWeight: 700,
-                }}>
-                  {label}
-                </p>
-                <p style={{
-                  fontFamily: T.serif, fontSize: "1.05rem",
-                  color: T.mid, marginBottom: "0.4rem",
-                }}>
-                  {value}
-                </p>
-                <p style={{ fontSize: "0.82rem", color: T.muted, lineHeight: 1.55 }}>
-                  {note}
-                </p>
-              </div>
-            ))}
-          </div>
-        </AnimateIn>
-
-        <AnimateIn delay={0.15}>
+        <AnimateIn delay={0.14}>
           <p style={{
-            fontSize: "clamp(0.9rem, 1.3vw, 1rem)",
-            color: T.muted, lineHeight: 1.8,
+            fontSize: "clamp(1rem, 1.5vw, 1.1rem)",
+            color: "rgba(255,255,255,0.6)", lineHeight: 1.85,
             maxWidth: 620,
-            fontStyle: "italic",
-            borderLeft: `3px solid ${T.amber}`,
-            paddingLeft: "1.25rem",
+            margin: "0 auto clamp(2.5rem, 5vw, 4.5rem)",
           }}>
-            The firefly system was rebuilt three times. The first version used a full physics
-            loop in JavaScript. The second used CSS animations but launched flies from random
-            positions. The third — what you see now — makes every fly start at the mason jar
-            and wander outward from there. The difference is small. It&apos;s also everything.
+            I&apos;ll keep adding new secrets over time — so click, hover over, and drag
+            anything that looks interesting.
           </p>
         </AnimateIn>
+
+        <AnimateIn delay={0.22}>
+          <p style={{
+            fontFamily: T.serif,
+            fontSize: "clamp(2rem, 5.5vw, 5rem)",
+            fontWeight: 400,
+            color: "#fff",
+            lineHeight: 1.05,
+            letterSpacing: "-0.01em",
+            opacity: 0.92,
+          }}>
+            Who knows<br />what you&apos;ll find?
+          </p>
+        </AnimateIn>
+
+        <EggCarton />
       </section>
 
       {/* ── Footer Nav ── */}
@@ -432,6 +398,12 @@ export default function PortfolioPage() {
         }}>
           ← Grayne
         </Link>
+        <span aria-hidden title="you know what to do" style={{
+          color: "rgba(255,255,255,0.1)", fontSize: "0.68rem", letterSpacing: "0.25em",
+          userSelect: "none",
+        }}>
+          ↑ ↑ ↓ ↓ ← → ← → B A
+        </span>
         <Link href="/#work" style={{
           color: "rgba(255,255,255,0.45)", textDecoration: "none",
           fontSize: "0.82rem", letterSpacing: "0.08em", transition: "color 0.2s",

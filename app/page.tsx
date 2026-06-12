@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import Image          from "next/image";
 import PlateBookCard from "./PlateBookCard";
+import GrayneCard    from "./GrayneCard";
 
 /* ─────────────────────────────────────────────────────────────
    SCROLL-REVEAL HOOK
@@ -104,6 +106,7 @@ function MasonJar({ tipped, onClick }: { tipped: boolean; onClick: () => void })
   return (
     <div
       role="button"
+      data-jar
       aria-label={tipped ? "Fireflies released!" : "Click to release fireflies"}
       tabIndex={0}
       onClick={handleClick}
@@ -267,7 +270,6 @@ const MOBILE_STARS = [
 function HeroSection({ onJarClick, jarTipped }: { onJarClick: () => void; jarTipped: boolean }) {
   /* Refs for direct DOM parallax — avoids React re-renders on every scroll tick */
   const starWrapperRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const frameRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let heroVisible = true;
@@ -286,10 +288,6 @@ function HeroSection({ onJarClick, jarTipped }: { onJarClick: () => void; jarTip
         const d = HERO_STARS[i]?.depth ?? 0.1;
         el.style.transform = `translateY(${sy * d * 0.35}px)`;
       });
-      // Photo frame parallax — frame drifts slightly faster than the photo (depth illusion)
-      if (frameRef.current) {
-        frameRef.current.style.transform = `translate(calc(-1.1vw + ${sy * 0.018}px), calc(1.1vw - ${sy * 0.025}px))`;
-      }
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
@@ -316,18 +314,59 @@ function HeroSection({ onJarClick, jarTipped }: { onJarClick: () => void; jarTip
           </div>
         ))}
 
-        {/* Top: title + bio */}
+        {/* Top: title + photo + bio */}
         <div className="flex-1 flex flex-col justify-center gap-6">
           <h1 className="text-white leading-[0.88]"
-            style={{ fontFamily: "var(--font-playfair), Georgia, serif", fontWeight: 400, fontSize: "clamp(3.8rem, 20vw, 6rem)", letterSpacing: "-0.02em" }}>
+            style={{ ...PORTFOLIO_STYLE, fontSize: "clamp(3.8rem, 19vw, 6rem)",
+              textShadow: "0 6px 30px rgba(4,9,24,0.65), 0 2px 10px rgba(4,9,24,0.5)",
+              animation: "slideUp 1.05s cubic-bezier(0.16,1,0.3,1) 0.1s both" }}>
             PORT<br />FOLiO
           </h1>
-          <p className="text-white/70 max-w-[260px]"
-            style={{ fontFamily: "var(--font-playfair), Georgia, serif", fontSize: "clamp(0.9rem, 4vw, 1rem)", textAlign: "justify", lineHeight: 1.75 }}>
-            I&apos;m a product designer passionate about creating{" "}
-            <span style={{ color: "#e8a020", fontStyle: "italic" }}>immersive experiences</span>
-            {" "}through engaging consumer journeys.
-          </p>
+
+          {/* Headshot — same gallery frame as desktop */}
+          <div className="relative self-start" style={{ height: "min(36vh, 90vw)", aspectRatio: "3/4", margin: "0.5rem 0 0.25rem 0.25rem" }}>
+            <div className="absolute inset-0 overflow-hidden" style={{
+              border: "1px solid rgba(232,160,32,0.75)",
+              boxShadow: "0 24px 70px rgba(4,9,24,0.55), 0 6px 22px rgba(4,9,24,0.35), 0 0 40px rgba(232,160,32,0.08)",
+            }}>
+              <Image src="/hero-headshot-bg.avif" alt="Kat Mrzljak" fill unoptimized priority
+                style={{ objectFit: "cover", objectPosition: "center 18%" }} />
+              <div aria-hidden className="absolute pointer-events-none" style={{
+                inset: "8px", border: "1px solid rgba(255,255,255,0.35)", mixBlendMode: "overlay",
+              }} />
+              <div aria-hidden className="absolute inset-0 pointer-events-none" style={{
+                boxShadow: "inset 0 0 60px rgba(4,9,24,0.35)",
+              }} />
+            </div>
+            {[
+              { top: "-6px", left: "-6px", borderWidth: "1px 0 0 1px" },
+              { top: "-6px", right: "-6px", borderWidth: "1px 1px 0 0" },
+              { bottom: "-6px", left: "-6px", borderWidth: "0 0 1px 1px" },
+              { bottom: "-6px", right: "-6px", borderWidth: "0 1px 1px 0" },
+            ].map((pos, i) => (
+              <div key={i} aria-hidden className="absolute pointer-events-none" style={{
+                ...pos, width: "14px", height: "14px",
+                borderStyle: "solid", borderColor: "rgba(232,160,32,0.9)",
+              }} />
+            ))}
+          </div>
+
+          {/* Bio — same glass-morphism card as desktop */}
+          <div className="self-end" style={{
+            maxWidth: 300,
+            padding: "1.2rem 1.4rem",
+            background: "rgba(9, 18, 44, 0.55)",
+            backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)",
+            border: "1px solid rgba(255,255,255,0.07)",
+            borderRadius: 2,
+          }}>
+            <p className="text-white"
+              style={{ fontFamily: "var(--font-playfair), Georgia, serif", fontSize: "clamp(0.9rem, 4vw, 1rem)", textAlign: "justify", lineHeight: 1.75 }}>
+              I&apos;m a product designer passionate about creating{" "}
+              <span style={{ color: "#e8a020", fontStyle: "italic" }}>immersive experiences</span>
+              {" "}through engaging consumer journeys.
+            </p>
+          </div>
         </div>
 
         {/* Bottom row: jar (left) + scroll button (right) */}
@@ -371,8 +410,8 @@ function HeroSection({ onJarClick, jarTipped }: { onJarClick: () => void; jarTip
           </div>
         ))}
 
-        {/* Ghost PORTFOLIO lines — float up staggered after the heading */}
-        <div className="absolute inset-x-0 z-10 select-none pointer-events-none" style={{ top: "14%" }}>
+        {/* Ghost PORTFOLIO lines — sit behind the photo */}
+        <div className="absolute inset-x-0 z-[3] select-none pointer-events-none" style={{ top: "14%" }}>
           <div aria-hidden className="font-black leading-[0.88] invisible" style={{ ...PORTFOLIO_STYLE, paddingTop: "0.65rem" }}>Portfolio</div>
           {[{ stroke: 0.18, opacity: 1 }, { stroke: 0.13, opacity: 0.75 }, { stroke: 0.09, opacity: 0.5 }].map(({ stroke, opacity }, i) => (
             <div key={i} style={{ overflow: "hidden", paddingTop: "0.65em", marginTop: "-0.65em" }}>
@@ -385,14 +424,41 @@ function HeroSection({ onJarClick, jarTipped }: { onJarClick: () => void; jarTip
           ))}
         </div>
 
-        {/* Photo */}
-        <div className="absolute z-20"
-          style={{ left: "12%", top: "calc(14vh + clamp(1.76rem, 4.84vw, 4.4rem) + min(36vh, 27vw))", transform: "translateY(-50%)", height: "min(65vh, 49vw)", aspectRatio: "3/4" }}>
+        {/* Photo block */}
+        <div className="absolute z-[5]"
+          style={{ left: "11%", top: "calc(8.5vh + clamp(1.76rem, 4.84vw, 4.4rem) + min(36vh, 27vw))", transform: "translateY(-50%)", height: "min(62vh, 47vw)", aspectRatio: "3/4" }}>
           <div className="relative w-full h-full">
-            <div ref={frameRef} className="absolute inset-0 bg-[#e8a020]" style={{ transform: "translate(-1.1vw, 1.1vw)" }} />
-            <div className="absolute inset-0 bg-[#060d1a] overflow-hidden flex items-center justify-center">
-              <span className="text-white/20 text-xs text-center px-4 leading-relaxed">Your photo here<br />(use Next.js &lt;Image&gt;)</span>
+            {/* Headshot — gallery frame */}
+            <div className="absolute inset-0 overflow-hidden" style={{
+              border: "1px solid rgba(232,160,32,0.75)",
+              boxShadow: "0 24px 70px rgba(4,9,24,0.55), 0 6px 22px rgba(4,9,24,0.35), 0 0 40px rgba(232,160,32,0.08)",
+            }}>
+              <Image src="/hero-headshot-bg.avif" alt="Kat Mrzljak" fill unoptimized priority
+                style={{ objectFit: "cover", objectPosition: "center 18%" }} />
+              {/* Inner mat hairline — floats over the photo like a fine-art mount */}
+              <div aria-hidden className="absolute pointer-events-none" style={{
+                inset: "clamp(8px, 1vw, 14px)",
+                border: "1px solid rgba(255,255,255,0.35)",
+                mixBlendMode: "overlay",
+              }} />
+              {/* Subtle vignette to seat the photo in the frame */}
+              <div aria-hidden className="absolute inset-0 pointer-events-none" style={{
+                boxShadow: "inset 0 0 60px rgba(4,9,24,0.35)",
+              }} />
             </div>
+            {/* Corner ticks — outside the photo edge */}
+            {[
+              { top: "-7px", left: "-7px", borderWidth: "1px 0 0 1px" },
+              { top: "-7px", right: "-7px", borderWidth: "1px 1px 0 0" },
+              { bottom: "-7px", left: "-7px", borderWidth: "0 0 1px 1px" },
+              { bottom: "-7px", right: "-7px", borderWidth: "0 1px 1px 0" },
+            ].map((pos, i) => (
+              <div key={i} aria-hidden className="absolute pointer-events-none" style={{
+                ...pos,
+                width: "clamp(14px, 1.6vw, 22px)", height: "clamp(14px, 1.6vw, 22px)",
+                borderStyle: "solid", borderColor: "rgba(232,160,32,0.9)",
+              }} />
+            ))}
           </div>
         </div>
 
@@ -401,6 +467,7 @@ function HeroSection({ onJarClick, jarTipped }: { onJarClick: () => void; jarTip
           <div style={{ overflow: "hidden", paddingTop: "0.65em", textAlign: "center" }}>
             <h1 className="text-white font-black" aria-label="PORTFOLiO"
               style={{ ...PORTFOLIO_STYLE, lineHeight: 0.88, display: "inline-block",
+                textShadow: "0 6px 30px rgba(4,9,24,0.65), 0 2px 10px rgba(4,9,24,0.5), 0 18px 60px rgba(4,9,24,0.4)",
                 animation: "slideUp 1.05s cubic-bezier(0.16,1,0.3,1) 0.1s both" }}>
               PORTFOLiO
             </h1>
@@ -458,21 +525,21 @@ function s4(cx: number, cy: number, r: number): string {
   return `M${pts.join("L")}Z`;
 }
 
-function AboutSection() {
-  const headingRef  = useScrollReveal(0);
-  const bodyRef     = useScrollReveal(0.1);
-  const linkRef     = useScrollReveal(0.18);
-  const photoRef    = useScrollReveal(0.08);
-  const sectionRef  = useRef<HTMLElement>(null);
-  const constRef    = useRef<SVGSVGElement>(null);
-  const constRefL   = useRef<SVGGElement>(null);
-  const constRefR   = useRef<SVGGElement>(null);
+/* Constellations + moon — scroll-driven curtain swing.
+   Self-contained so it can render in both the mobile and desktop about layouts;
+   each instance registers its own scroll handler keyed to the #about section. */
+function ConstellationSky({ svgStyle, moonStyle }: {
+  svgStyle?: React.CSSProperties; moonStyle?: React.CSSProperties;
+}) {
+  const constRef  = useRef<SVGSVGElement>(null);
+  const constRefL = useRef<SVGGElement>(null);
+  const constRefR = useRef<SVGGElement>(null);
 
   useEffect(() => {
-    const section = sectionRef.current;
-    const svg  = constRef.current;
-    const gL   = constRefL.current;
-    const gR   = constRefR.current;
+    const section = document.getElementById("about");
+    const svg = constRef.current;
+    const gL  = constRefL.current;
+    const gR  = constRefR.current;
     if (!section || !svg || !gL || !gR) return;
     const onScroll = () => {
       const rect = section.getBoundingClientRect();
@@ -483,7 +550,7 @@ function AboutSection() {
       const rem = 1 - progress;
       svg.style.opacity = Math.min(1, progress * 1.6).toFixed(2);
       /* Big Dipper swings in from the left, Cassiopeia from the right */
-      gL.style.transform = `translateX(${(-52 * rem).toFixed(1)}px) rotate(${(18 * rem).toFixed(2)}deg)`;
+      gL.style.transform = `translate(${(24 - 52 * rem).toFixed(1)}px, -8px) rotate(${(18 * rem).toFixed(2)}deg)`;
       gR.style.transform = `translateX(${( 52 * rem).toFixed(1)}px) rotate(${(-18 * rem).toFixed(2)}deg)`;
     };
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -492,11 +559,90 @@ function AboutSection() {
   }, []);
 
   return (
+    <>
+      <svg ref={constRef} aria-hidden className="absolute pointer-events-none select-none"
+        viewBox="0 0 240 100" preserveAspectRatio="xMidYMid meet"
+        style={{ left: "-34%", top: "5%", width: "168%", height: "auto", overflow: "visible", zIndex: 5, opacity: 0, ...svgStyle }}>
+        {/* Big Dipper — swings in from the LEFT, pivots around its rightmost star (Alkaid) */}
+        <g ref={constRefL} style={{ transform: "translate(24px, -8px)", transformOrigin: "110px 32px" }}>
+          <g stroke="rgba(255,255,255,0.28)" strokeWidth="1.1" fill="none">
+            <line x1="38" y1="52" x2="38" y2="72" />
+            <line x1="38" y1="72" x2="60" y2="74" />
+            <line x1="60" y1="74" x2="58" y2="54" />
+            <line x1="58" y1="54" x2="38" y2="52" />
+            <line x1="58" y1="54" x2="74" y2="47" />
+            <line x1="74" y1="47" x2="90" y2="42" />
+            <line x1="90" y1="42" x2="110" y2="32" />
+          </g>
+          <path d={s4(38,  52, 3.2)} fill="rgba(255,255,255,0.96)" style={{ filter: "drop-shadow(0 0 5px rgba(200,220,255,0.9))" }} />
+          <path d={s4(38,  72, 2.6)} fill="rgba(255,255,255,0.84)" style={{ filter: "drop-shadow(0 0 4px rgba(200,220,255,0.75))" }} />
+          <path d={s4(60,  74, 2.6)} fill="rgba(255,255,255,0.84)" style={{ filter: "drop-shadow(0 0 4px rgba(200,220,255,0.75))" }} />
+          <path d={s4(58,  54, 2.2)} fill="rgba(255,255,255,0.7)"  style={{ filter: "drop-shadow(0 0 3px rgba(200,220,255,0.65))" }} />
+          <path d={s4(74,  47, 2.9)} fill="rgba(255,255,255,0.9)"  style={{ filter: "drop-shadow(0 0 5px rgba(200,220,255,0.85))" }} />
+          <path d={s4(90,  42, 2.4)} fill="rgba(255,255,255,0.8)"  style={{ filter: "drop-shadow(0 0 4px rgba(200,220,255,0.75))" }} />
+          <path d={s4(110, 32, 3.1)} fill="rgba(255,255,255,0.98)" style={{ filter: "drop-shadow(0 0 6px rgba(200,220,255,1))" }} />
+          {/* left-side background scatter */}
+          <path d={s4(20,  38, 1.2)} fill="rgba(255,255,255,0.48)" />
+          <path d={s4(8,   68, 1.0)} fill="rgba(255,255,255,0.38)" />
+          <path d={s4(50,  15, 0.9)} fill="rgba(255,255,255,0.35)" />
+        </g>
+
+        {/* Cassiopeia — swings in from the RIGHT, pivots around its leftmost star */}
+        <g ref={constRefR} style={{ transformOrigin: "155px 55px" }}>
+          <g stroke="rgba(255,255,255,0.22)" strokeWidth="0.9" fill="none">
+            <line x1="155" y1="55" x2="165" y2="41" />
+            <line x1="165" y1="41" x2="178" y2="50" />
+            <line x1="178" y1="50" x2="191" y2="36" />
+            <line x1="191" y1="36" x2="204" y2="45" />
+          </g>
+          <path d={s4(155, 55, 2.1)} fill="rgba(255,255,255,0.82)" style={{ filter: "drop-shadow(0 0 3.5px rgba(200,220,255,0.75))" }} />
+          <path d={s4(165, 41, 2.6)} fill="rgba(255,255,255,0.96)" style={{ filter: "drop-shadow(0 0 5px rgba(200,220,255,0.9))" }} />
+          <path d={s4(178, 50, 2.0)} fill="rgba(255,255,255,0.72)" style={{ filter: "drop-shadow(0 0 3px rgba(200,220,255,0.65))" }} />
+          <path d={s4(191, 36, 2.8)} fill="rgba(255,255,255,0.98)" style={{ filter: "drop-shadow(0 0 6px rgba(200,220,255,1))" }} />
+          <path d={s4(204, 45, 2.2)} fill="rgba(255,255,255,0.84)" style={{ filter: "drop-shadow(0 0 4px rgba(200,220,255,0.8))" }} />
+          {/* right-side background scatter */}
+          <path d={s4(128, 58, 1.4)} fill="rgba(255,255,255,0.42)" />
+          <path d={s4(143, 42, 1.0)} fill="rgba(255,255,255,0.38)" />
+          <path d={s4(220, 46, 1.1)} fill="rgba(255,255,255,0.44)" />
+          <path d={s4(230, 72, 1.1)} fill="rgba(255,255,255,0.36)" />
+        </g>
+
+        {/* Standalone 4-point stars — scattered between the constellations */}
+        <g>
+          <path d={s4(124, 12, 2.4)} fill="rgba(255,255,255,0.88)" style={{ filter: "drop-shadow(0 0 5px rgba(200,220,255,0.8))" }} />
+          <path d={s4(100, 68, 1.9)} fill="rgba(255,255,255,0.7)"  style={{ filter: "drop-shadow(0 0 4px rgba(200,220,255,0.65))" }} />
+          <path d={s4(140, 88, 2.2)} fill="rgba(255,255,255,0.8)"  style={{ filter: "drop-shadow(0 0 5px rgba(200,220,255,0.7))" }} />
+          <path d={s4(196, 78, 1.7)} fill="rgba(255,255,255,0.66)" style={{ filter: "drop-shadow(0 0 3.5px rgba(200,220,255,0.6))" }} />
+          <path d={s4(28, 90, 1.8)}  fill="rgba(255,255,255,0.68)" style={{ filter: "drop-shadow(0 0 4px rgba(200,220,255,0.6))" }} />
+        </g>
+      </svg>
+
+      {/* Full moon — just under the constellations, slightly right of centre */}
+      <Moon style={{
+        position: "absolute", top: "24%", left: "62%",
+        transform: "translate(-50%, -50%)",
+        width: "clamp(34px, 4vw, 60px)", height: "clamp(34px, 4vw, 60px)",
+        zIndex: 6,
+        filter: "drop-shadow(0 0 11px rgba(200,225,255,0.65)) drop-shadow(0 0 24px rgba(200,225,255,0.3))",
+        ...moonStyle,
+      }} />
+    </>
+  );
+}
+
+function AboutSection() {
+  const headingRef  = useScrollReveal(0);
+  const bodyRef     = useScrollReveal(0.1);
+  const linkRef     = useScrollReveal(0.18);
+  const photoRef    = useScrollReveal(0.08);
+  const sectionRef  = useRef<HTMLElement>(null);
+
+  return (
     <section ref={sectionRef} id="about" className="relative bg-[#f0f4ff] overflow-visible" style={{ position: "relative", zIndex: 2 }}>
       <div id="contact" className="absolute top-0 pointer-events-none" aria-hidden />
 
       {/* ── Mobile / tablet (< 1024 px) ── */}
-      <div className="lg:hidden px-6 pb-10" style={{ paddingTop: "clamp(4rem, 12vw, 6rem)" }}>
+      <div className="lg:hidden px-6 pb-10 overflow-hidden" style={{ paddingTop: "clamp(4rem, 12vw, 6rem)" }}>
         <h2 className="text-[#1a1a1a] leading-tight mb-4"
           style={{ fontFamily: "var(--font-playfair), Georgia, serif", fontWeight: 400, fontSize: "clamp(2.2rem, 10vw, 4rem)" }}>
           Hello,<br />I&apos;m Kat!
@@ -513,8 +659,71 @@ function AboutSection() {
           linkedin.com/in/katrina-mrzljak
         </a>
         <div className="w-full max-w-md mx-auto">
-          <div className="w-full bg-[#0d1b3e] rounded-[2px] overflow-hidden flex items-center justify-center" style={{ aspectRatio: "3/4" }}>
-            <span className="text-white/25 text-xs text-center px-4">Your photo here</span>
+          <div className="relative" style={{ marginTop: "clamp(2.5rem, 10vw, 4rem)" }}>
+          {/* Constellations + moon — same scroll-driven sky as desktop */}
+          <ConstellationSky
+            svgStyle={{ left: "-12%", top: "-2%", width: "124%" }}
+            moonStyle={{ top: "20%", width: "clamp(30px, 9vw, 48px)", height: "clamp(30px, 9vw, 48px)" }} />
+          <div className="w-full arch-bg overflow-hidden relative"
+            style={{
+              aspectRatio: "3/4", borderRadius: "50% 50% 0 0 / 37.5% 37.5% 0 0",
+              boxShadow: "inset 0 22px 60px -18px rgba(195,218,255,0.22), inset 0 -40px 70px -30px rgba(2,6,18,0.5)",
+            }}>
+            {/* Moon disc rising behind her */}
+            <div aria-hidden style={{
+              position: "absolute", bottom: "20%", left: "50%", transform: "translateX(-50%)",
+              width: "52%", aspectRatio: "1", borderRadius: "50%",
+              background: "radial-gradient(closest-side, rgba(222,232,255,0.15) 0%, rgba(212,226,255,0.11) 70%, rgba(212,226,255,0.07) 96%, transparent 100%)",
+              boxShadow: "0 0 70px 24px rgba(195,218,255,0.09)",
+              pointerEvents: "none",
+            }} />
+            {/* Floor horizon line behind her seat */}
+            <div aria-hidden style={{
+              position: "absolute", bottom: "11%", left: "50%", transform: "translateX(-50%)",
+              width: "84%", height: 1,
+              background: "linear-gradient(to right, transparent, rgba(190,215,255,0.18) 35%, rgba(190,215,255,0.18) 65%, transparent)",
+              boxShadow: "0 0 10px 1px rgba(190,215,255,0.14)",
+              pointerEvents: "none",
+            }} />
+            {/* Moonlight pool on the floor */}
+            <div aria-hidden style={{
+              position: "absolute", bottom: "-4%", left: "50%", transform: "translateX(-50%)",
+              width: "78%", height: "52%",
+              background: "radial-gradient(55% 85% at 50% 100%, rgba(190,215,255,0.10) 0%, rgba(190,215,255,0.04) 45%, transparent 72%)",
+              pointerEvents: "none",
+            }} />
+            {/* Contact shadow under the figure */}
+            <div aria-hidden style={{
+              position: "absolute", bottom: "-1.5%", left: "50%", transform: "translateX(-50%)",
+              width: "48%", height: "7%",
+              background: "radial-gradient(50% 50% at 50% 50%, rgba(2,6,18,0.55) 0%, rgba(2,6,18,0.25) 55%, transparent 75%)",
+              filter: "blur(4px)",
+              pointerEvents: "none",
+            }} />
+            <div style={{ position: "absolute", bottom: 0, left: "50%", transform: "translateX(-50%)", height: "54%", aspectRatio: "492/566" }}>
+              <Image src="/about-sitting.avif" alt="Kat Mrzljak" fill unoptimized
+                style={{
+                  objectFit: "contain", objectPosition: "center bottom",
+                  /* cool grade + directional rims: moonlight from upper-left, faint firefly warmth from lower-right */
+                  filter: "brightness(0.97) saturate(0.88) drop-shadow(-4px -6px 8px rgba(195,220,255,0.42)) drop-shadow(3px 5px 10px rgba(232,170,60,0.16)) drop-shadow(0 0 30px rgba(170,200,255,0.14))",
+                }} />
+            </div>
+            {/* Fireflies drifting around her */}
+            {[
+              { left: "21%", bottom: "44%", size: 5, dur: 2.8, delay: 0.4 },
+              { left: "76%", bottom: "30%", size: 4, dur: 3.4, delay: 1.3 },
+              { left: "32%", bottom: "9%",  size: 4, dur: 2.4, delay: 2.1 },
+            ].map((f, i) => (
+              <div key={i} aria-hidden style={{
+                position: "absolute", left: f.left, bottom: f.bottom,
+                width: f.size, height: f.size, borderRadius: "50%",
+                backgroundColor: "#ffd479",
+                boxShadow: "0 0 8px 2px rgba(232,170,60,0.55)",
+                animation: `twinkle ${f.dur}s ease-in-out ${f.delay}s infinite`,
+                pointerEvents: "none",
+              }} />
+            ))}
+          </div>
           </div>
           <div className="bg-[#1a1a1a] text-white w-full p-5">
             <h4 className="mb-3" style={{ fontFamily: "var(--font-playfair), Georgia, serif", fontSize: "1.1rem" }}>Contact</h4>
@@ -561,66 +770,69 @@ function AboutSection() {
         {/* Photo + Contact group */}
         <div ref={photoRef} style={{ position: "absolute", left: "calc(75vw - 14.5vw)", top: "clamp(2rem, 4vw, 4rem)", width: "29vw", zIndex: 2 }}>
 
-          {/* ── Constellations — scroll-driven curtain swing ── */}
-          <svg ref={constRef} aria-hidden className="absolute pointer-events-none select-none"
-            viewBox="0 0 240 100" preserveAspectRatio="xMidYMid meet"
-            style={{ left: "-22%", top: "-2%", width: "144%", height: "auto", overflow: "visible", zIndex: 5, opacity: 0 }}>
-            {/* Big Dipper — swings in from the LEFT, pivots around its rightmost star (Alkaid) */}
-            <g ref={constRefL} style={{ transformOrigin: "110px 32px" }}>
-              <g stroke="rgba(255,255,255,0.28)" strokeWidth="1.1" fill="none">
-                <line x1="38" y1="52" x2="38" y2="72" />
-                <line x1="38" y1="72" x2="60" y2="74" />
-                <line x1="60" y1="74" x2="58" y2="54" />
-                <line x1="58" y1="54" x2="38" y2="52" />
-                <line x1="58" y1="54" x2="74" y2="47" />
-                <line x1="74" y1="47" x2="90" y2="42" />
-                <line x1="90" y1="42" x2="110" y2="32" />
-              </g>
-              <path d={s4(38,  52, 3.2)} fill="rgba(255,255,255,0.96)" style={{ filter: "drop-shadow(0 0 5px rgba(200,220,255,0.9))" }} />
-              <path d={s4(38,  72, 2.6)} fill="rgba(255,255,255,0.84)" style={{ filter: "drop-shadow(0 0 4px rgba(200,220,255,0.75))" }} />
-              <path d={s4(60,  74, 2.6)} fill="rgba(255,255,255,0.84)" style={{ filter: "drop-shadow(0 0 4px rgba(200,220,255,0.75))" }} />
-              <path d={s4(58,  54, 2.2)} fill="rgba(255,255,255,0.7)"  style={{ filter: "drop-shadow(0 0 3px rgba(200,220,255,0.65))" }} />
-              <path d={s4(74,  47, 2.9)} fill="rgba(255,255,255,0.9)"  style={{ filter: "drop-shadow(0 0 5px rgba(200,220,255,0.85))" }} />
-              <path d={s4(90,  42, 2.4)} fill="rgba(255,255,255,0.8)"  style={{ filter: "drop-shadow(0 0 4px rgba(200,220,255,0.75))" }} />
-              <path d={s4(110, 32, 3.1)} fill="rgba(255,255,255,0.98)" style={{ filter: "drop-shadow(0 0 6px rgba(200,220,255,1))" }} />
-              {/* left-side background scatter */}
-              <path d={s4(20,  38, 1.2)} fill="rgba(255,255,255,0.48)" />
-              <path d={s4(8,   68, 1.0)} fill="rgba(255,255,255,0.38)" />
-              <path d={s4(50,  15, 0.9)} fill="rgba(255,255,255,0.35)" />
-            </g>
+          {/* ── Constellations + moon — scroll-driven curtain swing ── */}
+          <ConstellationSky />
 
-            {/* Cassiopeia — swings in from the RIGHT, pivots around its leftmost star */}
-            <g ref={constRefR} style={{ transformOrigin: "155px 55px" }}>
-              <g stroke="rgba(255,255,255,0.22)" strokeWidth="0.9" fill="none">
-                <line x1="155" y1="55" x2="165" y2="41" />
-                <line x1="165" y1="41" x2="178" y2="50" />
-                <line x1="178" y1="50" x2="191" y2="36" />
-                <line x1="191" y1="36" x2="204" y2="45" />
-              </g>
-              <path d={s4(155, 55, 2.1)} fill="rgba(255,255,255,0.82)" style={{ filter: "drop-shadow(0 0 3.5px rgba(200,220,255,0.75))" }} />
-              <path d={s4(165, 41, 2.6)} fill="rgba(255,255,255,0.96)" style={{ filter: "drop-shadow(0 0 5px rgba(200,220,255,0.9))" }} />
-              <path d={s4(178, 50, 2.0)} fill="rgba(255,255,255,0.72)" style={{ filter: "drop-shadow(0 0 3px rgba(200,220,255,0.65))" }} />
-              <path d={s4(191, 36, 2.8)} fill="rgba(255,255,255,0.98)" style={{ filter: "drop-shadow(0 0 6px rgba(200,220,255,1))" }} />
-              <path d={s4(204, 45, 2.2)} fill="rgba(255,255,255,0.84)" style={{ filter: "drop-shadow(0 0 4px rgba(200,220,255,0.8))" }} />
-              {/* right-side background scatter */}
-              <path d={s4(128, 58, 1.4)} fill="rgba(255,255,255,0.42)" />
-              <path d={s4(143, 42, 1.0)} fill="rgba(255,255,255,0.38)" />
-              <path d={s4(220, 46, 1.1)} fill="rgba(255,255,255,0.44)" />
-              <path d={s4(230, 72, 1.1)} fill="rgba(255,255,255,0.36)" />
-            </g>
-          </svg>
-
-          {/* Full moon — just under the constellations, slightly right of centre */}
-          <Moon style={{
-            position: "absolute", top: "18%", left: "62%",
-            transform: "translate(-50%, -50%)",
-            width: "clamp(24px, 2.8vw, 42px)", height: "clamp(24px, 2.8vw, 42px)",
-            zIndex: 6,
-            filter: "drop-shadow(0 0 9px rgba(200,225,255,0.65)) drop-shadow(0 0 18px rgba(200,225,255,0.3))",
-          }} />
-          <div className="w-full arch-bg overflow-hidden flex items-center justify-center"
-            style={{ aspectRatio: "3/4", borderRadius: "50% 50% 0 0 / 37.5% 37.5% 0 0" }}>
-            <span className="text-white/25 text-xs text-center px-4">Your photo here</span>
+          <div className="w-full arch-bg overflow-hidden relative"
+            style={{
+              aspectRatio: "3/4", borderRadius: "50% 50% 0 0 / 37.5% 37.5% 0 0",
+              /* moonlight catching the inside of the arch — same rim vocabulary as the figure */
+              boxShadow: "inset 0 22px 60px -18px rgba(195,218,255,0.22), inset 0 -40px 70px -30px rgba(2,6,18,0.5)",
+            }}>
+            {/* Moon disc rising behind her */}
+            <div aria-hidden style={{
+              position: "absolute", bottom: "20%", left: "50%", transform: "translateX(-50%)",
+              width: "52%", aspectRatio: "1", borderRadius: "50%",
+              background: "radial-gradient(closest-side, rgba(222,232,255,0.15) 0%, rgba(212,226,255,0.11) 70%, rgba(212,226,255,0.07) 96%, transparent 100%)",
+              boxShadow: "0 0 70px 24px rgba(195,218,255,0.09)",
+              pointerEvents: "none",
+            }} />
+            {/* Floor horizon line behind her seat */}
+            <div aria-hidden style={{
+              position: "absolute", bottom: "11%", left: "50%", transform: "translateX(-50%)",
+              width: "84%", height: 1,
+              background: "linear-gradient(to right, transparent, rgba(190,215,255,0.18) 35%, rgba(190,215,255,0.18) 65%, transparent)",
+              boxShadow: "0 0 10px 1px rgba(190,215,255,0.14)",
+              pointerEvents: "none",
+            }} />
+            {/* Moonlight pool on the floor */}
+            <div aria-hidden style={{
+              position: "absolute", bottom: "-4%", left: "50%", transform: "translateX(-50%)",
+              width: "78%", height: "52%",
+              background: "radial-gradient(55% 85% at 50% 100%, rgba(190,215,255,0.10) 0%, rgba(190,215,255,0.04) 45%, transparent 72%)",
+              pointerEvents: "none",
+            }} />
+            {/* Contact shadow under the figure */}
+            <div aria-hidden style={{
+              position: "absolute", bottom: "-1.5%", left: "50%", transform: "translateX(-50%)",
+              width: "48%", height: "7%",
+              background: "radial-gradient(50% 50% at 50% 50%, rgba(2,6,18,0.55) 0%, rgba(2,6,18,0.25) 55%, transparent 75%)",
+              filter: "blur(4px)",
+              pointerEvents: "none",
+            }} />
+            <div style={{ position: "absolute", bottom: 0, left: "50%", transform: "translateX(-50%)", height: "54%", aspectRatio: "492/566" }}>
+              <Image src="/about-sitting.avif" alt="Kat Mrzljak" fill unoptimized
+                style={{
+                  objectFit: "contain", objectPosition: "center bottom",
+                  /* cool grade + directional rims: moonlight from upper-left, faint firefly warmth from lower-right */
+                  filter: "brightness(0.97) saturate(0.88) drop-shadow(-4px -6px 8px rgba(195,220,255,0.42)) drop-shadow(3px 5px 10px rgba(232,170,60,0.16)) drop-shadow(0 0 30px rgba(170,200,255,0.14))",
+                }} />
+            </div>
+            {/* Fireflies drifting around her */}
+            {[
+              { left: "21%", bottom: "44%", size: 5, dur: 2.8, delay: 0.4 },
+              { left: "76%", bottom: "30%", size: 4, dur: 3.4, delay: 1.3 },
+              { left: "32%", bottom: "9%",  size: 4, dur: 2.4, delay: 2.1 },
+            ].map((f, i) => (
+              <div key={i} aria-hidden style={{
+                position: "absolute", left: f.left, bottom: f.bottom,
+                width: f.size, height: f.size, borderRadius: "50%",
+                backgroundColor: "#ffd479",
+                boxShadow: "0 0 8px 2px rgba(232,170,60,0.55)",
+                animation: `twinkle ${f.dur}s ease-in-out ${f.delay}s infinite`,
+                pointerEvents: "none",
+              }} />
+            ))}
           </div>
           <div className="bg-[#1a1a1a] text-white w-full"
             style={{ position: "absolute", top: "100%", left: 0, padding: "clamp(1rem, 1.5vw, 1.5rem) clamp(1.2rem, 1.75vw, 1.75rem)", zIndex: 3 }}>
@@ -772,13 +984,29 @@ function ResumeSection() {
 function VideoCard({ href, title, tag, badge, pad }: {
   href: string; title: string; tag: string; badge?: string; pad: string;
 }) {
+  /* The card sits below the fold — don't fetch the video until it's near
+     the viewport, then start playback ourselves. */
+  const videoRef = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        void v.play().catch(() => {});
+        io.disconnect();
+      }
+    }, { rootMargin: "200px" });
+    io.observe(v);
+    return () => io.disconnect();
+  }, []);
+
   return (
     <a href={href}
       className="bg-[#0d1b3e] flex flex-col justify-end cursor-pointer group relative overflow-hidden no-underline transition-transform duration-300 hover:scale-[1.012]"
       style={{ aspectRatio: "16/10", padding: pad }}>
-      <video src="/dualite-bottle-loop.mp4" autoPlay muted playsInline loop preload="metadata"
-        className="absolute inset-x-0 w-full h-full"
-        style={{ objectFit: "cover", objectPosition: "center top", top: "-30px" }} />
+      <video ref={videoRef} src="/dualite-bottle-loop.mp4" muted playsInline loop preload="none"
+        className="absolute inset-x-0 w-full"
+        style={{ objectFit: "cover", objectPosition: "center top", top: "-115px", height: "calc(100% + 115px)" }} />
       <div aria-hidden className="absolute inset-0"
         style={{ background: "linear-gradient(to top, rgba(13,27,62,0.98) 0%, rgba(13,27,62,0.97) 15%, rgba(13,27,62,0.70) 28%, rgba(13,27,62,0.15) 40%, transparent 52%)" }} />
       <div className="absolute inset-0 bg-[#e8a020] opacity-0 group-hover:opacity-[0.07] transition-opacity duration-300" />
@@ -812,7 +1040,7 @@ function PortfolioCard({ pad }: { pad: string }) {
   ];
   return (
     <a href="/work/portfolio"
-      className="hero-bg flex flex-col justify-end relative overflow-hidden no-underline"
+      className="hero-bg flex flex-col justify-end cursor-pointer group relative overflow-hidden no-underline transition-transform duration-300 hover:scale-[1.012]"
       style={{ aspectRatio: "16/10", padding: pad }}
     >
       {/* Floating firefly dots — pure CSS glow pulse */}
@@ -846,7 +1074,11 @@ function PortfolioCard({ pad }: { pad: string }) {
         style={{ background: "linear-gradient(to top, rgba(7,16,31,0.96) 0%, rgba(7,16,31,0.72) 28%, rgba(7,16,31,0.15) 55%, transparent 72%)" }} />
 
       {/* Card text */}
-      <div className="relative z-10 flex flex-col gap-1.5">
+      <div className="relative z-10 flex flex-col gap-1">
+        <span className="self-start text-white font-semibold rounded-full"
+          style={{ fontSize: "clamp(0.6rem, 0.72vw, 0.68rem)", padding: "0.3em 0.9em", backgroundColor: "#e8a020", letterSpacing: "0.02em" }}>
+          ✦ Easter Eggs Inside
+        </span>
         <span className="text-white/30 block" style={{ fontSize: "clamp(0.65rem, 0.9vw, 0.8rem)" }}>
           Design Engineering  ·  Next.js 16  ·  TypeScript  ·  Tailwind CSS
         </span>
@@ -866,9 +1098,9 @@ function WorkSection() {
   const titleRef = useScrollReveal(0);
   const gridRef  = useScrollReveal(0.08);
   const projects = [
-    { title: "L'Oréal Brandstorm Case Competition 2026", tag: "Product Design  |  Brand Strategy  |  GTM Strategy", badge: "🏆 National Finalist — 3rd Place", href: "/work/project-1",
+    { title: "L'Oréal Brandstorm Case Competition 2026", tag: "Product Design  |  Brand Strategy  |  GTM Strategy", badge: "🏆 National Finalist — 3rd Place", href: "/work/loreal-brandstorm",
       desc: "A premium Gen-Z beauty ecosystem designed for L'Oréal's global competition — took 3rd place nationally." },
-    { title: "PlateBook", tag: "Product Design  |  iOS  |  React Native", href: "/work/project-2",
+    { title: "PlateBook", tag: "Product Design  |  iOS  |  React Native", href: "/work/platebook",
       desc: "A social recipe and meal-planning app that turns cooking into a shared experience." },
     { title: "Grayne", tag: "Product Design  |  Web App  |  React + Vite", badge: "In Progress", href: "/work/grayne",
       desc: "A journaling app that quietly tracks the sentiment behind your words — without telling you how to write." },
@@ -884,6 +1116,10 @@ function WorkSection() {
         /* Second card — PlateBook animated card */
         if (i === 1 && p.href) {
           return <PlateBookCard key={i} href={p.href} tag={p.tag} pad={pad} />;
+        }
+        /* Third card — Grayne sand-vortex card */
+        if (i === 2 && p.href) {
+          return <GrayneCard key={i} href={p.href} tag={p.tag} badge={p.badge} pad={pad} />;
         }
         return (
           <a key={i} href={p.href}
@@ -961,7 +1197,11 @@ function FooterSection() {
       if (!sectionRef.current) return;
       const rect = sectionRef.current.getBoundingClientRect();
       const vh = window.innerHeight;
-      const progress = Math.max(0, Math.min(1, (vh - rect.top) / (vh * 0.65)));
+      /* On short/narrow viewports the section can be shorter than 0.65·vh, so the
+         old denominator never let progress reach 1 — clamp it to the section height
+         so the sun always finishes rising by the time the page bottoms out. */
+      const denom = Math.min(vh * 0.65, rect.height * 0.85);
+      const progress = Math.max(0, Math.min(1, (vh - rect.top) / denom));
       if (skyRef.current) {
         skyRef.current.style.opacity = (progress * 0.82).toFixed(3);
       }
@@ -1015,7 +1255,7 @@ function FooterSection() {
       <div ref={sunRef} aria-hidden className="absolute pointer-events-none"
         style={{
           bottom: 0, left: "50%",
-          width: "min(58vw, 540px)", height: "min(58vw, 540px)",
+          width: "clamp(300px, 58vw, 540px)", height: "clamp(300px, 58vw, 540px)",
           borderRadius: "50%",
           background: "radial-gradient(circle at 50% 50%, #fff8e8 0%, #ffe098 22%, #f09828 45%, #c05830 70%, transparent 92%)",
           transform: "translateX(-50%) translateY(150%)",
@@ -1082,7 +1322,12 @@ const ATTR_OFFSETS = Array.from({ length: FIREFLY_COUNT }, (_, i) => ({
    FLY is deferred until jar click — the ~15 KB of per-fly path keyframes. */
 const [FIREFLY_CSS_BASE, FIREFLY_CSS_FLY] = (() => {
   /* BASE includes the glow pulse, hero text animations, and all wander paths.  */
-  let base = `@keyframes ff-blink{0%,100%{box-shadow:0 0 3px 1.5px rgba(232,200,40,.52),0 0 11px 3px rgba(232,200,40,.14)}50%{box-shadow:0 0 7px 3.5px rgba(232,200,40,.98),0 0 22px 6px rgba(232,200,40,.32)}}`;
+  /* Jar anchor — desktop jar sits at left:60% bottom:0; mobile jar sits at the
+     bottom-left of the hero (px-6 → 24px, pb-16 → 64px). Fly keyframes reference
+     these vars so the same CSS works at every breakpoint. */
+  let base = `.ff-host{--jar-x:60%;--jar-yoff:0px}`;
+  base += `@media (max-width:1023.98px){.ff-host{--jar-x:24px;--jar-yoff:64px}}`;
+  base += `@keyframes ff-blink{0%,100%{box-shadow:0 0 3px 1.5px rgba(232,200,40,.52),0 0 11px 3px rgba(232,200,40,.14)}50%{box-shadow:0 0 7px 3.5px rgba(232,200,40,.98),0 0 22px 6px rgba(232,200,40,.32)}}`;
   base += `@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}`;
   base += `@keyframes slideUp{from{transform:translateY(42%);opacity:0}to{transform:translateY(0);opacity:1}}`;
   /* FLY contains the per-fly position keyframes — deferred until jar click. */
@@ -1098,13 +1343,13 @@ const [FIREFLY_CSS_BASE, FIREFLY_CSS_FLY] = (() => {
     const ePx  = 32 + _fr(i * 5.5) * 16;            // 32–48 px — within mouth opening
     const eFB  = 88 + _fr(i * 7.2) * 20;            // 88–108 px from bottom, just above opening
     const lx = [
-      `calc(60% + ${jxPx.toFixed(1)}px)`,
-      `calc(60% + ${ePx.toFixed(1)}px)`,
+      `calc(var(--jar-x, 60%) + ${jxPx.toFixed(1)}px)`,
+      `calc(var(--jar-x, 60%) + ${ePx.toFixed(1)}px)`,
       ...Array.from({ length: 5 }, (_, k) => `${(5 + _fr(i * 13.7 + (k + 2) * 6.3) * 83).toFixed(1)}%`),
     ];
     const ly = [
-      `calc(100% - ${jyFB.toFixed(1)}px)`,
-      `calc(100% - ${eFB.toFixed(1)}px)`,
+      `calc(100% - var(--jar-yoff, 0px) - ${jyFB.toFixed(1)}px)`,
+      `calc(100% - var(--jar-yoff, 0px) - ${eFB.toFixed(1)}px)`,
       ...Array.from({ length: 3 }, (_, k) => `${(5 + _fr(i * 19.3 + (k + 2) * 8.7) * 83).toFixed(1)}%`),
     ];
     fly += `@keyframes ffx${i}{0%{left:${lx[0]}}10%{left:${lx[1]}}27%{left:${lx[2]}}45%{left:${lx[3]}}63%{left:${lx[4]}}82%{left:${lx[5]}}100%{left:${lx[6]}}}`;
@@ -1154,18 +1399,11 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
 
-  /* Pre-release: on desktop the flies are already visible from the first SSR paint
-     (opacity inlined in JSX).  useLayoutEffect fires synchronously before the first
-     reactive browser paint — on mobile we zero the opacity before the browser repaints
-     so there's no flash at desktop-jar positions.  On desktop we just kick off the
-     blink + wander animations; opacity stays at the JSX-inlined value. */
+  /* Pre-release: flies are visible inside the jar from the first SSR paint
+     (opacity inlined in JSX). Jar-relative positioning is handled by the
+     --jar-x / --jar-yoff CSS vars on .ff-host, so the same coordinates work
+     at every breakpoint — just kick off the blink + wander animations. */
   useLayoutEffect(() => {
-    if (window.innerWidth < 1024) {
-      // Mobile/tablet: hide immediately — flies are at desktop-jar coordinates
-      ffRefs.current.forEach(el => { if (el) el.style.opacity = '0'; });
-      return;
-    }
-    // Desktop: start animations; opacity is already correct from SSR HTML
     ffRefs.current.forEach((el, i) => {
       if (!el) return;
       const blinkDur   = (1.5 + _fr(i * 3.1) * 2).toFixed(1);
@@ -1250,9 +1488,13 @@ export default function Home() {
       } else if (heroInViewRef.current) {
         /* ── Repulsion: push flies away from cursor (skip when hero off screen) ── */
 
-        // Jar centre in screen coords — used for grace-period proximity check
-        const jarScrX = window.innerWidth * 0.60 + 40;  // left:60% + half SVG width
-        const jarScrY = (heroRef.current?.getBoundingClientRect().bottom ?? 0) - 41; // body centre
+        // Jar centre in screen coords — measure the visible jar (mobile + desktop differ)
+        const jarEl = Array.from(document.querySelectorAll<HTMLElement>("[data-jar]"))
+          .find(el => el.offsetParent !== null);
+        const jarRect = jarEl?.getBoundingClientRect();
+        const jarScrX = jarRect ? jarRect.left + jarRect.width / 2 : window.innerWidth * 0.60 + 40;
+        const jarScrY = jarRect ? jarRect.bottom - 41
+          : (heroRef.current?.getBoundingClientRect().bottom ?? 0) - 41; // body centre
         const JAR_R   = 110; // px — protection zone around the jar
 
         const rects = ffRefs.current.map(el =>
@@ -1340,7 +1582,7 @@ export default function Home() {
 
       {/* Hero + fireflies — position:absolute children scroll with the section.
            CSS handles all movement; JS only fades each fly in after jar click. */}
-      <div ref={heroRef} style={{ position: "relative" }}>
+      <div ref={heroRef} className="ff-host" style={{ position: "relative" }}>
         <HeroSection onJarClick={handleJarClick} jarTipped={jarTipped} />
         {Array.from({ length: FIREFLY_COUNT }, (_, i) => {
           // Pre-compute jar position + per-fly glow opacity so the SSR HTML already
@@ -1355,8 +1597,8 @@ export default function Home() {
               className="pointer-events-none"
               style={{
                 position: "absolute",
-                left: `calc(60% + ${jxPx.toFixed(1)}px)`,
-                top:  `calc(100% - ${jyFB.toFixed(1)}px)`,
+                left: `calc(var(--jar-x, 60%) + ${jxPx.toFixed(1)}px)`,
+                top:  `calc(100% - var(--jar-yoff, 0px) - ${jyFB.toFixed(1)}px)`,
                 width: 3, height: 3,
                 borderRadius: "50%",
                 backgroundColor: "#e8c828",
