@@ -49,5 +49,5 @@ export function PingPongVideo({ src, style }: { src: string; style?: CSSProperti
     };
   }, []);
 
-  return <video ref={ref} src={src} muted playsInline preload="none" style={style} />;
+  return <video ref={ref} src={src} muted playsInline preload="metadata" style={style} />;
 }
