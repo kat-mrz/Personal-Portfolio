@@ -14,15 +14,6 @@ export function PingPongVideo({ src, style }: { src: string; style?: CSSProperti
     let raf = 0;
     let last = 0;
 
-    /* Defer fetching the video until it's near the viewport */
-    const io = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        void v.play().catch(() => {});
-        io.disconnect();
-      }
-    }, { rootMargin: "200px" });
-    io.observe(v);
-
     const stepBack = (t: number) => {
       const dt = (t - last) / 1000;
       last = t;
@@ -45,9 +36,8 @@ export function PingPongVideo({ src, style }: { src: string; style?: CSSProperti
     return () => {
       v.removeEventListener("ended", onEnded);
       cancelAnimationFrame(raf);
-      io.disconnect();
     };
   }, []);
 
-  return <video ref={ref} src={src} muted playsInline preload="metadata" style={style} />;
+  return <video ref={ref} src={src} autoPlay muted playsInline preload="metadata" style={style} />;
 }
