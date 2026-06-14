@@ -1143,7 +1143,7 @@ function WorkSection() {
       <div className="lg:hidden" style={{ paddingTop: "clamp(4rem, 12vw, 12rem)", paddingLeft: "clamp(1.5rem, 5vw, 5vw)", paddingRight: "clamp(1.5rem, 5vw, 5vw)" }}>
         <h2 className="text-[#1a1a1a]"
           style={{ fontFamily: "var(--font-playfair), Georgia, serif", fontWeight: 400, fontSize: "clamp(2.5rem, 6vw, 6rem)", marginBottom: "clamp(2rem, 4vw, 4rem)", textAlign: "right" }}>
-          Selected Work
+          Selected Works
         </h2>
         {cards(1, "0.75rem", "1rem")}
       </div>
@@ -1151,7 +1151,7 @@ function WorkSection() {
         <div style={{ paddingLeft: "43vw", paddingRight: "5vw" }}>
           <h2 ref={titleRef} className="text-[#1a1a1a]"
             style={{ fontFamily: "var(--font-playfair), Georgia, serif", fontWeight: 400, fontSize: "clamp(2.5rem, 6vw, 6rem)", marginBottom: "clamp(1.5rem, 3vw, 3rem)", textAlign: "right" }}>
-            Selected Work
+            Selected Works
           </h2>
         </div>
         <div ref={gridRef} style={{ paddingLeft: "5vw", paddingRight: "5vw" }}>
