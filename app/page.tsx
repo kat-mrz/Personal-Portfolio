@@ -984,27 +984,11 @@ function ResumeSection() {
 function VideoCard({ href, title, tag, badge, pad }: {
   href: string; title: string; tag: string; badge?: string; pad: string;
 }) {
-  /* The card sits below the fold — don't fetch the video until it's near
-     the viewport, then start playback ourselves. */
-  const videoRef = useRef<HTMLVideoElement>(null);
-  useEffect(() => {
-    const v = videoRef.current;
-    if (!v) return;
-    const io = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        void v.play().catch(() => {});
-        io.disconnect();
-      }
-    }, { rootMargin: "200px" });
-    io.observe(v);
-    return () => io.disconnect();
-  }, []);
-
   return (
     <a href={href}
       className="bg-[#0d1b3e] flex flex-col justify-end cursor-pointer group relative overflow-hidden no-underline transition-transform duration-300 hover:scale-[1.012]"
       style={{ aspectRatio: "16/10", padding: pad }}>
-      <video ref={videoRef} src="/dualite-bottle-loop.mp4" muted playsInline loop preload="none"
+      <video src="/dualite-bottle-loop.mp4" autoPlay muted playsInline loop preload="none"
         className="absolute inset-x-0 w-full"
         style={{ objectFit: "cover", objectPosition: "center top", top: "-115px", height: "calc(100% + 115px)" }} />
       <div aria-hidden className="absolute inset-0"
